@@ -307,11 +307,9 @@ module.exports = {
         body("email").isEmail().trim().withMessage("Email address cannot be empty"),
     ],
 
-    create_account: [
-        body("name").isString().isLength(3).trim().withMessage("Full Name cannot be empty"),
-        body("email").isEmail().trim().withMessage("Email address cannot be empty"),
-        body("password").isLength(6).withMessage("Password cannot be empty"),
-        body("avatar").isString().trim()
+    connect_account: [
+        body("nickname").isString().isLength(3).trim().withMessage("Full Name cannot be empty"),
+        body("referrer").isString().trim()
     ],
 
     forgot_password: [

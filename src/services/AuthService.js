@@ -13,83 +13,44 @@ const { v4: uuidv4 } = require('uuid');
 
 
 module.exports = class AuthService {
-    constructor(userModel, accountModel, tokenModel, subscriptionModel, workspaceModel) {
+    constructor(userModel) {
       this.userModel = userModel;
-      this.accountModel = accountModel;
-      this.tokenModel = tokenModel;
-      this.subscriptionModel = subscriptionModel;
-      this.workspaceModel = workspaceModel;
     }
 
-    async Signup(data, timezone, language) {
+    async CreateUser(data) {
 
-        const checkExistingUser = await this.userModel.findOne({ email: data.email });
+        const checkExistingUser = await this.userModel.findOne({ id: data.id });
 
         if (checkExistingUser) {
-            let error = new Error("Account already exists.");
-            error.statusCode = 400;
-            throw error;
+            delete checkExistingUser._doc._id;
+            delete checkExistingUser._doc.__v;
+            return checkExistingUser;
         }
 
-        const _password = await bcrypt.hash(data.password, 10);
-
-        const id = await uuidv4();
-
         const userRecord = await this.userModel.create({
-            user_id: await uuidv4(),
-            main_id: id,
-            name: data.name,
-            avatar: data.avatar,
-            email: data.email,
-            password: _password,
-            user_type: Secrets.USER_ADMIN,
-            role_id: "290d49ac-e502-4123-87ad-da1b96d627f0",
-            refresh_token: randtoken.generate(16)
+            id: data.id,
+            nickname: data.nickname,
+            referrer: data.referrer
         });
 
-        await this.accountModel.create({
-            creator_id: id,
-            email: data.email
-        });
+        // await this.accountModel.create({
+        //     creator_id: id,
+        //     email: data.email
+        // });
 
-        const otp = generateRandomNDigits(5);
-
-        const token = await this.tokenModel.create({
-            id: await uuidv4(),
-            email: userRecord.email,
-            token: otp,
-            type: "signup"
-        });
-
-        const link = `${Secrets.STAGING_BASE_URL}/auth/verify?email=${data.email}&type=signup&redirect_to=/login`;
-       
-        const jwt_payload = {
-            user_id: encrypt(userRecord.user_id.toString()),
-            main_id: encrypt(userRecord.main_id.toString()),
-            user_email: encrypt(userRecord.email.toString()),
-            user_type: encrypt(userRecord.user_type.toString())
-        };
-
-        const authorization = JWT.sign(jwt_payload, Secrets.JWT_TOKEN, { expiresIn: "3h" });
-
-        delete userRecord._doc.password;
-        delete userRecord._doc.user_type;
         delete userRecord._doc._id;
         delete userRecord._doc.__v;
-        userRecord._doc.authorization = authorization;
-        userRecord._doc.expires_in = 1200000;
-        userRecord._doc.expires_at = 12000000;
 
         const user = userRecord;
 
-        userEvents.dispatch(events.user.signUp, { user: userRecord, link, otp: token.token, language, timezone });
+        //userEvents.dispatch(events.user.signUp, { user: userRecord });
         
         return user;
     }
 
 
 
-    async LoginWithLinkedin() {
+    async SetUserName() {
 
         const response = await axios.post(Secrets.LINKEDIN_ACCESS_TOKEN_URL,
           {

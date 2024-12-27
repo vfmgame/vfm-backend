@@ -14,19 +14,20 @@ const {
   validate,
   reset_password,
   forgot_password,
-  create_account,
+  connect_account,
   resend_verification_email
 } = require("../middleware/validator");
 
 
 
 
-router.post("/signup",
-  validate(create_account),
+router.post("/connect",
+  validate(connect_account),
   async (req, res, next) => {
+    console.log(req.body);
     try {
-      const authServiceInstance = new AuthService(UserModel, AccountModel, TokenModel);
-      const user = await authServiceInstance.Signup(req.body, req.headers["timezone"], req.headers["accept-language"].split("-")[0]);
+      const authServiceInstance = new AuthService(UserModel);
+      const user = await authServiceInstance.CreateUser(req.body);
       return sendResponse(req, res, 201, false, user, "Account created successfully");
     } catch (error) {
       return next(error);

@@ -19,9 +19,9 @@ const UserSchema = new Schema({
 		type: String,
 		trim: true
 	},
-	username: {
+	nickname: {
 		type: String,
-		unique: 'Two users cannot share the same email ({VALUE})',
+		unique: 'Two users cannot share the same nickname ({VALUE})',
 		trim: true,
 		required: true
 	},
@@ -29,7 +29,7 @@ const UserSchema = new Schema({
 		type: Date,
 		require: false
 	},
-	refresh_token: {
+	referrer: {
 		type: String,
 		required: false
 	},
