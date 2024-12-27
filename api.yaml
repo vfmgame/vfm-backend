@@ -1,0 +1,1287 @@
+swagger: "2.0"
+info:
+  title: Setly API
+  description: This is Setly API Documentation.
+  version: 1.0.0
+  contact:
+    email: essiensaviour.a@gmail.com
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/liscences/LIS"
+  servers:
+    - url: http://localhost:4000/api/v1
+      description: Local server URL
+    - url: https://api.setly.ai/api/v1
+      description: Live server URL
+schemes: [https,http]
+
+
+#Return Users From get request
+paths:
+  # /string:
+  #   get:
+  #     summary: Returns a string.
+  #     description: String Chechup
+  #     responses:
+  #       200:    # status code
+  #         description: Successul Response
+  #         schema: 
+  #           type: string
+  #           example: "Users String"
+  #       400:
+  #         description: User Error
+  #         schema: 
+  #           type: string
+  #           example: "Some Error "
+
+
+
+#Returns an array of Users
+  # /users:
+  #   get:
+  #     summary: Returns a list of users.
+  #     description: People Who are already registered
+  #     responses:
+  #       200:    # status code
+  #         description: Successul Response
+  #         schema: 
+  #           type: array
+  #           items: 
+  #             type: object
+  #             properties:
+  #               id:
+  #                 type: integer
+  #               name:
+  #                 type: string
+
+
+#Get Request with path id
+  # /users/{userId}:
+  #   get:
+  #     summary: Returns a user by ID.
+  #     description: Returns the Specific User
+  #     parameters:
+  #       - name: userId
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type : integer
+  #           format: int64
+  #     responses: 
+  #       '200':
+  #         description: OK
+  #         schema:
+  #           type: object
+  #           example: {name: syed}
+
+#Post json/body & Body required
+  # /create:
+  #   post:
+  #     summary: Adds a new user
+  #     produces:
+  #       - application/json
+  #     consumes:
+  #       - application/json
+  #     parameters:
+  #       - in: body
+  #         name: body
+  #         schema:
+  #           type: object
+  #           required:
+  #             - name
+  #             - id
+  #           properties:
+  #             id:
+  #               type: integer
+  #             name:
+  #               type: string
+  #     responses:
+  #       '200':
+  #         description: OK
+
+
+#Authenticate User
+  /api/v1/auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Signup a new user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+           $ref: "#/components/schemas/Register"
+      responses:
+        201:
+          description: Successful Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+
+#Authenticate User
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login user
+      description: An existing user with account.
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+           $ref: "#/components/schemas/Auth"
+      responses:
+        200:
+          description: Successful Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+#Verify User Email
+  /auth/verify-email:
+    post:
+      tags:
+        - Auth
+      summary: Verify user email address
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+#Connect Linkedin
+  /auth/reset_password:
+    post:
+      tags:
+        - Auth
+      summary: Reset user password
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+#Forgot User Password
+  /auth/forgot_password:
+    post:
+      tags:
+        - Auth
+      summary: Verify user email
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+
+#Reset User Password
+  /auth/reset_password:
+    post:
+      tags:
+        - Auth
+      summary: Reset user password
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+#Resend Email User
+  /auth/resend_verification_email:
+    post:
+      tags:
+        - Auth
+      summary: Resend verification email to user
+      description: Resend a new email to users whose reset token has expired or need a new one.
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+      responses:
+        200:
+          description: Successful Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+
+#Returns a User
+  /users:
+    get:
+      tags:
+        - User
+      summary: Returns a user.
+      description: Already registered and authenticated user
+      # parameters:
+      #   - in: header
+      #     name: X-Request-ID
+      responses:
+        200:    # status code
+          description: Successul Response
+          schema: 
+            $ref: "#/components/schemas/User"
+
+
+
+#User Information
+  /users/confirm_user_info:
+    put:
+      tags:
+        - User
+      summary: Complete user information
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+      # - in: header
+      #   name: X-Request-ID
+        - in: body
+          name: body
+          schema:
+           $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: Successful Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+#Upload User Avatar
+  # /users/upload:
+  #   post:
+  #     tags:
+  #       - User
+  #     summary: Upload user avatar
+  #     produces:
+  #       - application/json
+  #     consumes:
+  #       - application/json
+  #     parameters:
+  #     # - in: header
+  #     #   name: X-Request-ID
+  #       - in: body
+  #         name: body
+  #         schema:
+  #          $ref: "#/components/schemas/Upload"
+  #     responses:
+  #       200:
+  #         description: Successful Response
+  #       400:
+  #         description: User Error
+  #       500:
+  #         description: Internal Server Error
+
+
+
+
+
+#Collect a User Payment Method
+  /users/collect_payment_method:
+    post:
+      tags:
+        - User  
+      summary: Collect and save a user payment method
+      description: Already registered and authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+#Confirm a User Payment Method
+  /users/confirm_payment_method/:{clientSecret}:
+    post:
+      tags:
+        - User  
+      summary: Confirm a user payment method
+      description: Already registered and authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: clientSecret
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+#Change a User Password
+  /users/password:
+    put:
+      tags:
+        - User  
+      summary: Update a user password
+      description: Already registered and authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+      # - in: header
+      #   name: X-Request-ID
+        - name: old_password
+          in: body
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: body
+          required: true
+          schema:
+            type: string
+        - name: confirm_password
+          in: body
+          required: true
+          schema:
+            type: string
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+#Optimize Linkedin Profile
+  /users/optimize_linkedin:
+    post:
+      tags:
+        - User  
+      summary: Optimize a Linkedin profile
+      description: Already registered and authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: url
+          in: body
+          required: true
+          schema:
+            type: string
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+
+#Create a Prospect List
+  /list:
+    post:
+      tags:
+        - Prospect List  
+      summary: Create a prospect list
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/components/schemas/List"
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+#Create a Prospect List
+  /list:
+    get:
+      tags:
+        - Prospect List  
+      summary: Fetch prospect list
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+#Create a Prospect List
+  /list/:{name}:
+    get:
+      tags:
+        - Prospect List  
+      summary: Fetch a single prospect list
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: name
+          in: path
+          schema:
+            type: string
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+#Create a prospect
+  /prospects:
+    post:
+      tags:
+        - Prospect
+      summary: Create a prospect
+      description: Already registered and authenticated user
+      content: 
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Prospect"
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+#Update a prospect
+  /prospects/:
+    put:
+      tags:
+        - Prospect
+      summary: Update a single prospect
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/components/schemas/Prospect"
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+#Fetch a prospect
+  /prospects/:{name}:
+    get:
+      tags:
+        - Prospect  
+      summary: Fetch a prospect
+      description: Already registered and authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type : string
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+#List prospects
+  /prospects:
+    get:
+      tags:
+        - Prospect  
+      summary: List prospects
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Start a campaign
+  /campaigns/start:
+    post:
+      tags:
+        - Campaign  
+      summary: Start a campaign
+      description: Already registered and authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/components/schemas/Campaign"
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+#Start a campaign
+  /campaigns/stop:
+    post:
+      tags:
+        - Campaign  
+      summary: Ends a campaign
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/components/schemas/Campaign"
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+#Pause a campaign
+  /campaigns/pause:
+    post:
+      tags:
+        - Campaign  
+      summary: Pause a campaign
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/components/schemas/Campaign"
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+
+
+
+#List Tasks
+  /tasks:
+    get:
+      tags:
+        - Task  
+      summary: List tasks
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+#Activate a campaign
+  /tasks/:
+    post:
+      tags:
+        - Task  
+      summary: Activate a task
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/components/schemas/Task"
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Send a Linkedin Message
+  /prospects/message:
+    post:
+      tags:
+        - Messaging  
+      summary: Send Linkedin message
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/components/schemas/Messaging"
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+
+
+#List a Linkedin Message
+  /prospects/message/:
+    get:
+      tags:
+        - Messaging  
+      summary: List messages
+      description: Already authenticated user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        200:    # status code
+          description: Successul Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+
+
+#Deletes a User
+  # /users/security/account/:{reason}/:{feedback}:
+  #   delete:
+  #     tags:
+  #       - Settings  
+  #     summary: Delete a user account
+  #     description: Already registered and authenticated user
+  #     produces:
+  #       - application/json
+  #     consumes:
+  #       - application/json
+  #     parameters:
+  #       - name: reason
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type : string
+  #       - name: feedback
+  #         in: path
+  #         required: true
+  #         schema:
+  #           type : string
+  #     responses:
+  #       200:    # status code
+  #         description: Successul Response
+  #       400:
+  #         description: User Error
+  #       500:
+  #         description: Internal Server Error
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+#Return lists of Nigerian banks
+  # /misc/banks:
+  #   get:
+  #     tags:
+  #       - Misc  
+  #     summary: Returns list of banks.
+  #     # description: 
+  #     # parameters:
+  #     #   - in: header
+  #     #     name: X-Request-ID
+  #     responses:
+  #       200:    # status code
+  #         description: Successul Response
+  #         schema: 
+  #           $ref: "#/components/schemas/Misc"
+
+
+
+
+
+#Verify a Bank Account
+  # /misc/resolve_bank:
+  #   post:
+  #     tags:
+  #       - Misc
+  #     summary: Resolve a bank account
+  #     produces:
+  #       - application/json
+  #     consumes:
+  #       - application/json
+  #     parameters:
+  #     # - in: header
+  #     #   name: X-Request-ID
+  #       - in: body
+  #         name: body
+  #         schema:
+  #          $ref: "#/components/schemas/VerifyBankAccount"
+  #     responses:
+  #       200:
+  #         description: Successful Response
+  #       400:
+  #         description: User Error
+  #       500:
+  #         description: Internal Server Error
+
+
+
+# #Return lists of Nigerian banks
+#   /users/bank:
+#     put:
+#       tags:
+#         - User  
+#       summary: Add a new bank account.
+#       description: 
+#       parameters:
+#         - in: body
+#           name: body
+#           schema:
+#            $ref: "#/components/schemas/BankAccount"
+#       responses:
+#         200:
+#           description: Successful Response
+#         400:
+#           description: User Error
+#         500:
+#           description: Internal Server Error
+
+
+
+#User Information
+  # /users/location_info:
+  #   post:
+  #     tags:
+  #       - User
+  #     summary: Add user location information
+  #     produces:
+  #       - application/json
+  #     consumes:
+  #       - application/json
+  #     parameters:
+  #       - in: body
+  #         name: body
+  #         schema:
+  #          $ref: "#/components/schemas/UserLocation"
+  #     responses:
+  #       200:
+  #         description: Successful Response
+  #       400:
+  #         description: User Error
+  #       500:
+  #         description: Internal Server Error
+
+
+#Query
+#Get Query
+  # /usersQuery:
+  #   get:
+  #     summary: Returns a user by ID.
+  #     description: Returns the Specific User
+  #     parameters:
+  #       - in: query
+  #         name: id
+  #         type: integer
+  #         enum: [1, 2]
+  #         required: true
+  #       # - in: query
+  #       #   name: id
+  #       #   type: integer
+  #       #   enum: [1, 2]
+  #       #   required: true
+  #     responses: 
+  #       '200':
+  #         description: OK
+  #         schema:
+  #           type: object
+  #           example: {name: syed,id: 21}
+
+
+
+#File Upload Multiform Data
+  # /upload:
+  #   post:
+  #     tags:
+  #       - Upload
+  #     summary: Upload Video/Image for Inferring
+  #     consumes:
+  #       - multipart/form-data
+  #     parameters:
+  #       - in: formData
+  #         name: file
+  #         type: file
+  #         required: true
+  #         description: The file to upload.
+  #       # - in: formData
+  #       #   name: app
+  #       #   type: string
+  #       #   required: true
+  #       #   description: Name of the model.
+  #       # - in: formData
+  #       #   name: id
+  #       #   type: string
+  #       #   required: true
+  #       #   description: Some random Id.
+  #     responses:
+  #       200:
+  #         description: Successful Response
+  #       400:
+  #         description: User Error
+  #       500:
+  #         description: Internal Server Error
+
+
+#In Headers
+  # /string:
+  #   get:
+  #     summary: Checks if the server is alive
+  #     parameters:
+  #       - in: header
+  #         name: X-Request-ID
+  #         schema:
+  #           type: string
+  #           format: uuid
+  #         required: true
+  #     responses:
+  #       200:
+  #         description: Successful Response
+  #       400:
+  #         description: User Error
+  #       500:
+  #         description: Internal Server Error
+
+#Cokies
+  # /ping:
+  #   get:
+  #     summary: Checks if the server is alive
+  #     parameters:
+  #       - in: cookie
+  #         name: debug
+  #         schema:
+  #           type: integer
+  #           enum: [0, 1]
+  #           default: 0
+  #       - in: cookie
+  #         name: csrftoken
+  #         schema:
+  #           type: string
+
+
+
+components:
+  schemas:
+
+    Register:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
+        - company
+        - industry
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        company_name:
+          type: string
+        industry:
+          type: string
+
+
+    Auth:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    
+    List:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        prospects:
+          type: string
+        page:
+          type: string
+        status:
+          type: string
+
+      
+    Prospect:
+      type: object
+      required:
+        - id
+        - name
+        - page
+        - first_name
+        - last_name
+        - url
+        - handle
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        page:
+          type: number
+        first_name:
+          type: string
+        last_name:
+          type: string
+        url:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        region:
+          type: string
+        job_title:
+          type: string
+        photo:
+          type: string
+        handle:
+          type: string
+        headline:
+          type: string
+        company:
+          type: string
+        connection:
+          type: string
+        website:
+          type: array
+
+    User:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
+        - company
+        - industry
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        customer_id:
+          type: string
+        points:
+          type: number
+        picture:
+          type: string
+        company:
+          type: string
+        industry:
+          type: string
+        last_login:
+          type: string
+        LINKEDIN_ACCESS_TOKEN:
+          type: string
+        RESET_TOKEN:
+          type: string
+        RESET_TOKEN_TTL:
+          type: string
+        user_type:
+          type: string
+        notification_channel:
+          type: array
+        email_verified:
+          type: string
+        linkedin_connected:
+          type: boolean
+        status:
+          type: string
+        created_at:
+          type: date
+        updated_at:
+          type: date
+
+    Campaign:
+      type: object
+      required:
+        - name
+        - prospect_list
+        - status
+      properties:
+        name:
+          type: string
+        prospect_list:
+          type: string
+        status:
+          type: string
+        created_at:
+          type: date
+        updated_at:
+          type: date
+    
+
+    Task:
+      type: object
+      required:
+        - name
+        - prospect_list
+        - status
+      properties:
+        name:
+          type: string
+        prospect_list:
+          type: string
+        status:
+          type: string
+        created_at:
+          type: date
+        updated_at:
+          type: date
+
+
+    Messaging:
+      type: object
+      required:
+        - recipients
+        - subject
+        - body
+      properties:
+        recipients:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        attachments:
+          type: array
