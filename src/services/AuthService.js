@@ -28,7 +28,8 @@ module.exports = class AuthService {
         }
 
         const userRecord = await this.userModel.create({
-            id: data.id,
+            id: await uuidv4(),
+            userId: data.userId,
             nickname: data.nickname,
             referrer: data.referrer
         });
@@ -49,23 +50,39 @@ module.exports = class AuthService {
     }
 
 
+    async CheckExistingUser(data) {
+        const checkExistingUser = await this.userModel.findOne({ nickname: data.nickname });
+        if (checkExistingUser) {
+            let error = new Error("Nickname is already taken...");
+            error.statusCode = 400;
+            throw error;
+        } else {
+            return true;
+        }
+    }
 
-    async SetUserName() {
 
-        const response = await axios.post(Secrets.LINKEDIN_ACCESS_TOKEN_URL,
-          {
-            grant_type: "client_credentials",
-            client_id: Secrets.LINKEDIN_CLIENT_ID,
-            client_secret: Secrets.LINKEDIN_CLIENT_SECRET
-          },
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
+
+    async SetNickName(data) {
+        const ts = new Date(); // timestamp
+        const updateUser = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
+            $set: {
+                nickname: data.nickname,
+                updated_at: ts
             },
-          }
-        )
-        console.log(response);
-        return response;
+        },
+        {
+            new: true
+        });
+        if (!updateUser) {
+            let error = new Error("Could not set nickname! Try again!");
+            error.statusCode = 400;
+            throw error;
+        } else {
+            delete updateUser._doc._id;
+            delete updateUser._doc.__v;
+            return updateUser;
+        }
     }
 
 

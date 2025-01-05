@@ -34,18 +34,36 @@ router.post("/connect",
     }
 });
 
-
-router.post("/validate",
+router.post("/nickname/validate",
   celebrate({
     body: Joi.object({
-      email: Joi.string().email().required()
+      nickname: Joi.string().required()
     }),
   }),
   async (req, res, next) => {
     try {
-      const authServiceInstance = new AuthService(UserModel, AccountModel);
-      const user = await authServiceInstance.ValidateUserEmail(req.body);
-      return sendResponse(req, res, 200, false, user, "Email Validated!");
+      const authServiceInstance = new AuthService(UserModel);
+      const user = await authServiceInstance.CheckExistingUser(req.body);
+      return sendResponse(req, res, 200, false, user, "Nickname is available...");
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    }
+});
+
+
+router.post("/nickname",
+  celebrate({
+    body: Joi.object({
+      userId: Joi.string().required(),
+      nickname: Joi.string().required()
+    }),
+  }),
+  async (req, res, next) => {
+    try {
+      const authServiceInstance = new AuthService(UserModel);
+      const user = await authServiceInstance.SetNickName(req.body);
+      return sendResponse(req, res, 200, false, user, "Nickname set successfully!");
     } catch (error) {
       console.log(error);
       return next(error);

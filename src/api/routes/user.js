@@ -25,34 +25,33 @@ const { workspace } = require("../../subscribers/events");
 
 
 
-authRouter.get("/me",
+router.get("/details/:userId",
   async (req, res, next) => {
-    const { user } = req.body;
+    console.log(req.params);
+    
+    const { userId } = req.params
     try {
-      const userServiceInstance = new UserService(UserModel, AccountModel, SubscriptionModel, null, null, LinkedinModel);
-      const userDetails = await userServiceInstance.getUser(user.user_id, user.main_id);
+      const userServiceInstance = new UserService(UserModel);
+      const userDetails = await userServiceInstance.getUser(userId);
       return sendResponse(req, res, 200, false, userDetails, "Account fetched!");
     } catch (error) {
       return next(error)
     }
 });
 
-authRouter.put("/password",
+router.put("/bonus/claim",
   celebrate({
     body: Joi.object({
-      old_password: Joi.string().required(),
-      password: Joi.string()
-      .min(8)
-      .required(),
-      confirm_password: Joi.ref("password")
+      userId: Joi.string().required()
     }),
   }),
   async (req, res, next) => {
-    const { user } = req.body;
+    console.log(req.body);
+    
     try {
-      const userServiceInstance = new UserService(UserModel, AccountModel);
-      const updatePassword = await userServiceInstance.updatePassword(user, req.body);
-      return sendResponse(req, res, 200, false, updatePassword, "Password updated successfully");
+      const userServiceInstance = new UserService(UserModel);
+      const claimBonus = await userServiceInstance.claimBonus(req.body);
+      return sendResponse(req, res, 200, false, claimBonus, "Bonus claimed successfully");
     } catch (error) {
       return next(error);
     }

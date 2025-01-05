@@ -17,64 +17,23 @@ module.exports = class UserService {
     return userSettings;
   }
     
-  async getUser(user_id, main_id) {
-    const fetchUser = await this.userModel.findOne({ user_id: user_id });
-    console.log(user_id);
-    console.log(main_id);
-    const account = await this.accountModel.findOne({ creator_id: main_id });
-    const subscription = await this.subscriptionModel.findOne({ creator_id: main_id });
-    const linkedinAccounts = await this.linkedinModel.find({ creator_id: main_id });
-    if (!fetchUser) {
-      let error = new Error("Account doesn't exists.");
-      error.statusCode = 400;
-      throw error;
-    }
-    
-    const filteredAccounts = linkedinAccounts.filter(account => delete account._doc.access_token)
-    .filter(account => delete account._doc.scope)
-    .filter(account => delete account._doc.expires_in)
-    .filter(account => delete account._doc.refresh_token);
-
-
-
-
-    delete account._doc.updated_at;
-    delete account._doc.created_at;
-    delete account._doc._id;
-    delete account._doc.__v;
-
-    account._doc.user = {
-      user_id: fetchUser.user_id,
-      avatar: fetchUser.avatar,
-      name: fetchUser.name,
-      email: fetchUser.email,
-      role: fetchUser.user_type,
-      created_at: fetchUser.created_at,
-      updated_at: fetchUser.updated_at
-    };
-    account._doc.linked_in_accounts = filteredAccounts;
-    account._doc.subscription = subscription;
-
-    return account;
+  async getUser(userId) {
+    const fetchUser = await this.userModel.findOne({ userId });
+    console.log(fetchUser);
+    delete fetchUser._doc.updated_at;
+    delete fetchUser._doc.created_at;
+    delete fetchUser._doc._id;
+    delete fetchUser._doc.__v;
+    return fetchUser;
   }
 
 
-  async updatePassword(data, body) {
+  async claimBonus(data) {
     const ts = new Date(); // timestamp
-    
-    const hashedPassword = bcrypt.compareSync(body.old_password, data.password);
 
-    if(!hashedPassword) {
-      let error = new Error("Wrong old password!");
-      error.statusCode = 400;
-      throw error;
-    }
-
-    const _password = await bcrypt.hash(body.password, 10);
-
-    const updateUser = await this.userModel.findOneAndUpdate({ email: data.email }, {
+    const updateUser = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
       $set: {
-        password: _password,
+        wallet: 70,
         updated_at: ts
       },
       },
@@ -83,7 +42,7 @@ module.exports = class UserService {
     });
 
     if (!updateUser) {
-      let error = new Error("Password cannot be updated. Try again.");
+      let error = new Error("Something went wrong. Try again.");
       error.statusCode = 500;
       throw error;
     }
