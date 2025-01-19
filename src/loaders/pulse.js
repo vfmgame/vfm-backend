@@ -6,7 +6,7 @@ const pulseConfig = {
   processEvery: "1 minute",
   maxConcurrency: 10,
   db: {
-    address: Secrets.DATABASE_LOCAL_URL,
+    address: Secrets.DATABASE_LIVE_URL,
     collection: 'jobs'
   },
   resumeOnRestart: true

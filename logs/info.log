@@ -657,3 +657,5 @@
 2025-01-05 16:51:20 info: Success on : http://localhost:4000/api/v1/users/details/7433379 | status: 200
 2025-01-05 17:09:21 info: Success on : http://localhost:4000/api/v1/users/details/7433379 | status: 200
 2025-01-05 17:09:21 info: Success on : http://localhost:4000/api/v1/users/details/7433379 | status: 200
+2025-01-19 20:54:40 info: Success on : http://localhost:4000/api/v1/users/details/7626473 | status: 200
+2025-01-19 20:54:40 info: Success on : http://localhost:4000/api/v1/users/details/7626473 | status: 200
