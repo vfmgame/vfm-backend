@@ -10,8 +10,6 @@ const Secrets = {
 	DATABASE_LIVE_URL: process.env.DATABASE_LIVE_URL,
 	DATABASE_NAME: process.env.DATABASE_NAME,
 	JWT_TOKEN: process.env.JWT_TOKEN,
-	MAILER_API_KEY: process.env.MAILER_API_KEY,
-	MAILER_DOMAIN: process.env.MAILER_DOMAIN,
 	SENDGRID_KEY: process.env.SENDGRID_KEY,
 	LOCAL_BASE_URL: process.env.LOCAL_BASE_URL,
 	LIVE_BASE_URL: process.env.LIVE_BASE_URL,
