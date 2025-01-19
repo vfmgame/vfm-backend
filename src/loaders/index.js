@@ -1,8 +1,5 @@
 const expressLoader = require("./express");
 const mongooseLoader = require("./mongoose");
-const cron = require("node-cron");
-const agenda = require("./agenda");
-//const searchPeople = require("../services/ScrapeDataService")
 
 module.exports = async (app) => {
     // cron.schedule("* * * * * *", () => {

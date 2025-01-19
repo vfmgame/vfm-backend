@@ -5,7 +5,6 @@ const { sendResponse } = require("./ResponseHelper");
 const { addUser, removeUser, getUser, getUsersInRoom } = require("./userHelper");
 const generateRandomNDigits = require("./tokenGenerator");
 const { encrypt, decrypt } = require("./encryption");
-const {handleAPIErrors} = require("./axiosError")
 const prepStream = require("./eventStream")
 
 
@@ -37,7 +36,6 @@ module.exports = {
 	getUsersInRoom,
 	encrypt,
 	decrypt,
-	handleAPIErrors,
 	prepStream,
 	generateRandomNDigits
 }
