@@ -1,7 +1,6 @@
 const crypto = require("crypto");
 const moment = require("moment");
 const { generateUniqueId, generateOrderId, generateReference } = require("./generateIdHelper");
-const mailer = require("./mailerHelper");
 const { sendResponse } = require("./ResponseHelper");
 const { addUser, removeUser, getUser, getUsersInRoom } = require("./userHelper");
 const generateRandomNDigits = require("./tokenGenerator");
@@ -27,7 +26,6 @@ const cryptoTokenBuffer = (length = 56) => crypto.randomBytes(length)
 .toString('hex');
 
 module.exports = {
-	mailer,
 	sendResponse,
     generateUniqueId,
 	generateReference,

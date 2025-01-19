@@ -36,7 +36,6 @@
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
-    "mailgun.js": "^9.2.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.45",
     "mongoose": "^6.12.9",
