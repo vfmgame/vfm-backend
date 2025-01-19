@@ -24,7 +24,7 @@ module.exports = async (app) => {
   });
   
   app.use(cors({
-      origin: [Secrets.LOCAL_BASE_URL, Secrets.STAGING_BASE_URL, Secrets.STAGING_BASE_URL],
+      origin: [Secrets.LIVE_BASE_URL, Secrets.STAGING_BASE_URL, Secrets.STAGING_BASE_URL],
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true
     }
