@@ -1,17 +1,13 @@
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const express = require("express");
-const routes = require("../api");
 const session = require("express-session");
 const swaggerUI = require("swagger-ui-express");
 const YAML = require("yamljs");
 const swaggerJsDocs = YAML.load("./api.yaml");
 const Secrets = require("../config");
 const path = require("path")
-const { authRoutes, userRoutes, prospectRoutes, carouselRoutes, notificationRoutes, 
-  webhook, rootRoutes, workspaceRoutes, teamRoutes, linkedinRoutes, postRoutes,
-  postTemplateRoutes, contentWritingRoutes, timeSlotInstanceRoutes, timeSlotRoutes, stripeRoute,
-  invoiceRoute, calendarRoute } = require("../api");
+const { authRoutes, userRoutes, } = require("../api");
 
 module.exports = async (app) => {
   app.get("/status", (req, res) => { res.status(200).end(); });
@@ -38,8 +34,7 @@ module.exports = async (app) => {
   ));
   
 
-  app.use("/webhook", webhook);
-  
+ 
 
   // App Middlewares
   app.use(bodyParser.json());
@@ -59,22 +54,7 @@ module.exports = async (app) => {
   });
 
   app.use("/api/v1/users", userRoutes);
-  app.use("/api/v1/teams", teamRoutes);
-  app.use("/api/v1/posts", postRoutes);
-  app.use("/api/v1/content_writing_styles", contentWritingRoutes);
-  app.use("/api/v1/post_templates", postTemplateRoutes);
-  app.use("/api/v1/linkedin", linkedinRoutes);
-  app.use("/api/v1/workspaces", workspaceRoutes);
-  app.use("/api/v1/prospects", prospectRoutes);
-  app.use("/api/v1/carousels", carouselRoutes);
-  app.use("/api/v1/notifications", notificationRoutes);
   app.use("/api/v1/auth", authRoutes);
-  app.use("/api/v1/stripe", stripeRoute);
-  app.use("/api/v1/invoices", invoiceRoute);
-  app.use("/api/v1/calendar", calendarRoute);
-  app.use("/api/v1/time_slot_instances", timeSlotInstanceRoutes);
-  app.use("/api/v1/time_slots", timeSlotRoutes);
-  app.use("/api/v1", rootRoutes);
 
 
 

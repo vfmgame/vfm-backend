@@ -1,11 +1,9 @@
 const bcrypt = require("bcryptjs");
-const { generateUniqueId, encrypt, generateRandomNDigits } = require("../helper");
+const { encrypt, generateRandomNDigits } = require("../helper");
 const axios = require("axios").default;
 const Secrets = require("../config");
 const userEvents = require("../subscribers/user");
-const workspaceEvents = require("../subscribers/workspace");
 const events = require("../subscribers/events");
-const LinkedinService = require("./LinkedinService");
 const JWT = require("jsonwebtoken");
 const randtoken = require('rand-token');
 const { v4: uuidv4 } = require('uuid');
@@ -212,66 +210,9 @@ module.exports = class AuthService {
     }
 
 
-    async VerifyUserEmail(data, timezone, language) {
-        const ts = new Date(); // timestamp
-        const checkToken = await this.tokenModel.findOne({ token: data.token, email: data.email });
-
-        if (!checkToken) {
-            let error = new Error("Invalid token or expired!");
-            error.statusCode = 400;
-            throw error;
-        }
-
-        await this.InviteType(checkToken.type, data.email)
-        //await this.RecoveryType(checkToken.type, data.email);
-        await this.EmailVerified(data.email);
-
-        if(checkToken.type === "signup") {
-            const update_user = await this.userModel.findOneAndUpdate({ email: data.email }, {
-                $set: {
-                    email_verified: true,
-                    email_verified_at: ts,
-                    updated_at: ts
-                },
-            },
-            {
-                new: true
-            });
-
-            const workspace = await this.workspaceModel.create({ id: await uuidv4(), name: "Default" });
-            userEvents.dispatch(events.user.verifyEmail, { user: update_user });
-            workspaceEvents.dispatch(events.workspace.createWorkspace, { workspace, creator_id: update_user.user_id, timezone, language });
     
-            return workspace;
-        }
-    }
 
-    // async RecoveryType(type, email) {
-    //     if(type === "recovery") {
-    //         const userRecord = await this.userModel.findOne({ email });
-
-    //         const jwt_payload = {
-    //             user_id: encrypt(userRecord.user_id.toString()),
-    //             main_id: encrypt(userRecord.main_id.toString()),
-    //             user_email: encrypt(userRecord.email.toString()),
-    //             user_type: encrypt(userRecord.user_type.toString())
-    //         };
-    
-    //         const authorization = JWT.sign(jwt_payload, Secrets.JWT_TOKEN, { expiresIn: "3h" });
-    
-    //         delete userRecord._doc.password;
-    //         delete userRecord._doc.user_type;
-    //         delete userRecord._doc._id;
-    //         delete userRecord._doc.__v;
-    //         userRecord._doc.authorization = authorization;
-    //         userRecord._doc.expires_in = 1200000;
-    //         userRecord._doc.expires_at = 12000000;
-    
-    //         const user = userRecord;
-
-    //         return user;
-    //     }
-    // }
+  
 
 
     async InviteType(type, data) {
@@ -400,76 +341,5 @@ module.exports = class AuthService {
         //     throw error;
         // }
         return { token: response.request.path};
-    }
-
-
-    async GetLinkedinAuthToken(code, email) {
-
-        const ts = new Date(); // timestamp
-
-        const response = await axios({
-            method: "POST",
-            url: `${Secrets.LINKEDIN_ACCESS_TOKEN_URL}`,
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            data: {
-                grant_type: "authorization_code",
-                code,
-                client_id: Secrets.LINKEDIN_CLIENT_ID,
-                client_secret: Secrets.LINKEDIN_CLIENT_SECRET,
-                redirect_uri: Secrets.LINKEDIN_REDIRECT_LIVE_URL
-            }
-        })
-
-        const linkedinServiceInstance = new LinkedinService();
-        const linkedinProfile = await linkedinServiceInstance.GetLinkedinProfile(response.data.access_token);
-
-
-        if(!response && !profilePicture) {
-            let error = new Error("Could not connect Linkedin");
-            error.statusCode = 400;
-            throw error;
-        }
-
-        const update_user = await this.userModel.update({ 
-            status: 1,
-            LINKEDIN_ACCESS_TOKEN: response.data.access_token,
-            status: "activated",
-            first_name: linkedinProfile.firstName,
-            last_name: linkedinProfile.lastName,
-            picture: linkedinProfile.image,
-            linkedin_connected: true,
-            updated_at: ts
-        }, {
-            where: {
-               email
-            }
-        });
-
-        // const update_user = await this.userModel.findOneAndUpdate({email}, {
-        //         $set: {
-        //             LINKEDIN_ACCESS_TOKEN: response.data.access_token,
-        //             status: "activated",
-        //             first_name: linkedinProfile.firstName,
-        //             last_name: linkedinProfile.lastName,
-        //             picture: linkedinProfile.image,
-        //             linkedin_connected: true,
-        //             updated_at: ts
-        //           },
-        //     },
-        //     {
-        //         new: true
-        // });
-
-
-        if(!update_user) {
-            let error = new Error("Could not connect Linkedin Token");
-            error.statusCode = 400;
-            throw error;
-        }
-
-        console.log(response.data);
-        return { user: update_user };
     }
 }
