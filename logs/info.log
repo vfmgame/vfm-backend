@@ -2358,3 +2358,6 @@
 2025-01-19 20:51:33 info: Success on : http://localhost:4000/api/v1/users/details/7626473 | status: 200
 2025-01-19 20:54:40 info: Success on : http://localhost:4000/api/v1/users/details/7626473 | status: 200
 2025-01-19 20:54:40 info: Success on : http://localhost:4000/api/v1/users/details/7626473 | status: 200
+2025-01-19 21:25:22 info: Success on : http://localhost:4000/api/v1/users/bonus/claim | status: 200
+2025-01-19 21:25:22 info: Success on : http://localhost:4000/api/v1/users/details/3015031 | status: 200
+2025-01-19 21:25:22 info: Success on : http://localhost:4000/api/v1/users/details/3015031 | status: 200
