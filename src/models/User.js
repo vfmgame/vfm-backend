@@ -19,7 +19,11 @@ const UserSchema = new Schema({
         type: String,
         unique: true
     },
-	name: {
+	firstname: {
+		type: String,
+		trim: true
+	},
+	lastname: {
 		type: String,
 		trim: true
 	},
@@ -29,6 +33,9 @@ const UserSchema = new Schema({
 		trim: true,
 		required: true
 	},
+	avatar: {
+		type: String
+	},
 	claim: {
 		type: Number,
 		default: 0
@@ -37,7 +44,7 @@ const UserSchema = new Schema({
 		type: Date,
 		require: false
 	},
-	referrer: {
+	referred_by: {
 		type: String,
 		required: false
 	},
@@ -46,19 +53,31 @@ const UserSchema = new Schema({
 		default: 0,
 		required: false
 	},
-	referral_profit: {
-		type: Number,
-		default: 0,
-		required: false
-	},
 	referral_code: {
 		type: String,
-		required: false
+		required: false,
+		unique: true
 	},
 	wallet: {
-		type: Number,
-		default: 0,
+		type: Object,
+		default: {
+			points: 0,
+			passes: 0
+		},
 		required: false
+	},
+	isMining: {
+		type: Boolean,
+		required: false,
+		default: false
+	},
+	miningStartedTime: {
+		type: String,
+		default: null
+	},
+	mineRate: {
+		type: Number,
+		default: 0.6945
 	},
 	RESET_TOKEN: {
 		type: String,

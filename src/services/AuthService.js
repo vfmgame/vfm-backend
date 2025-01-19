@@ -19,6 +19,9 @@ module.exports = class AuthService {
 
     async CreateUser(data) {
 
+        console.log(data);
+        
+
         const checkExistingUser = await this.userModel.findOne({ id: data.id });
 
         if (checkExistingUser) {
@@ -30,21 +33,22 @@ module.exports = class AuthService {
         const userRecord = await this.userModel.create({
             id: await uuidv4(),
             userId: data.userId,
+            firstname: data.firstName,
+            lastname: data.lastName,
             nickname: data.nickname,
-            referrer: data.referrer
+            avatar: data.avatar,
+            referral_code: `vfm${data.userId}`
         });
 
-        // await this.accountModel.create({
-        //     creator_id: id,
-        //     email: data.email
-        // });
 
         delete userRecord._doc._id;
         delete userRecord._doc.__v;
 
         const user = userRecord;
 
-        //userEvents.dispatch(events.user.signUp, { user: userRecord });
+        if(data.referrer) {
+            userEvents.dispatch(events.user.signUp, { referred_by: data.referrer, userId: user.userId });
+        }
         
         return user;
     }

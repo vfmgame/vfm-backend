@@ -39,10 +39,24 @@ router.get("/details/:userId",
     }
 });
 
+
+router.get("/refers/:referralId",
+  async (req, res, next) => {
+    const { referralId } = req.params
+    try {
+      const userServiceInstance = new UserService(UserModel);
+      const userReferral = await userServiceInstance.fetchReferral(referralId);
+      return sendResponse(req, res, 200, false, userReferral, "Referral fetched!");
+    } catch (error) {
+      return next(error)
+    }
+});
+
 router.put("/bonus/claim",
   celebrate({
     body: Joi.object({
-      userId: Joi.string().required()
+      userId: Joi.string().required(),
+      bonus: Joi.number().required()
     }),
   }),
   async (req, res, next) => {
@@ -52,6 +66,47 @@ router.put("/bonus/claim",
       const userServiceInstance = new UserService(UserModel);
       const claimBonus = await userServiceInstance.claimBonus(req.body);
       return sendResponse(req, res, 200, false, claimBonus, "Bonus claimed successfully");
+    } catch (error) {
+      return next(error);
+    }
+});
+
+
+router.put("/reward/claim",
+  celebrate({
+    body: Joi.object({
+      userId: Joi.string().required(),
+      reward: Joi.number().required()
+    }),
+  }),
+  async (req, res, next) => {
+    console.log(req.body);
+    
+    try {
+      const userServiceInstance = new UserService(UserModel);
+      const claimBonus = await userServiceInstance.claimReward(req.body);
+      return sendResponse(req, res, 200, false, claimBonus, "Reward claimed successfully");
+    } catch (error) {
+      return next(error);
+    }
+});
+
+
+router.post("/farm",
+  celebrate({
+    body: Joi.object({
+      userId: Joi.string().required(),
+      isMining: Joi.boolean().required(),
+      miningStartedTime: Joi.date().required()
+    }),
+  }),
+  async (req, res, next) => {
+    console.log(req.body);
+    
+    try {
+      const userServiceInstance = new UserService(UserModel);
+      const startFarming = await userServiceInstance.farmReward(req.body);
+      return sendResponse(req, res, 200, false, startFarming, "Farming request successful");
     } catch (error) {
       return next(error);
     }
