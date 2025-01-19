@@ -19,12 +19,40 @@ module.exports = class UserService {
     
   async getUser(userId) {
     const fetchUser = await this.userModel.findOne({ userId });
-    console.log(fetchUser);
-    delete fetchUser._doc.updated_at;
-    delete fetchUser._doc.created_at;
     delete fetchUser._doc._id;
     delete fetchUser._doc.__v;
     return fetchUser;
+  }
+
+  async fetchReferral(referral_id) {
+    const referrals = await this.userModel.find({ referred_by: referral_id });
+    return referrals;
+  }
+
+
+  async farmReward(data) {
+    const ts = new Date(); // timestamp
+
+    const formatDate = new Date(data.miningStartedTime);
+    const milliseconds = formatDate.getTime();
+
+    const updateUser = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
+      $set: {
+        isMining: data.isMining,
+        miningStartedTime: milliseconds,
+        updated_at: ts
+      },
+      },
+      {
+        new: true
+    });
+
+    if (!updateUser) {
+      let error = new Error("Something went wrong. Try again.");
+      error.statusCode = 500;
+      throw error;
+    }
+    return updateUser;
   }
 
 
@@ -33,7 +61,36 @@ module.exports = class UserService {
 
     const updateUser = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
       $set: {
-        wallet: 70,
+        wallet: {
+          points: data.bonus
+        },
+        claimed_bonus: true,
+        updated_at: ts
+      },
+      },
+      {
+        new: true
+    });
+
+    if (!updateUser) {
+      let error = new Error("Something went wrong. Try again.");
+      error.statusCode = 500;
+      throw error;
+    }
+    return updateUser;
+  }
+
+
+  async claimReward(data) {
+    const ts = new Date(); // timestamp
+
+    const updateUser = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
+      $set: {
+        wallet: {
+          points: data.reward
+        },
+        isMining: false,
+        miningStartedTime: null,
         updated_at: ts
       },
       },
