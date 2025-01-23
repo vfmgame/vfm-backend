@@ -45,7 +45,7 @@ module.exports = async (app) => {
 
 
   app.get("/api/v1", async (req, res) => {
-    res.send("Socialbooster Backend Service");
+    res.send("VFM Backend Service");
   });
 
   app.use("/api/v1/users", userRoutes);
