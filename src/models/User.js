@@ -72,8 +72,8 @@ const UserSchema = new Schema({
 		default: false
 	},
 	miningStartedTime: {
-		type: String,
-		default: null
+		type: Number,
+		default: 0
 	},
 	mineRate: {
 		type: Number,

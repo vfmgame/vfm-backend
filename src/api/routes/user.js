@@ -88,12 +88,11 @@ router.post("/farm",
     body: Joi.object({
       userId: Joi.string().required(),
       isMining: Joi.boolean().required(),
-      miningStartedTime: Joi.date().required()
+      miningStartedTime: Joi.number().required()
     }),
   }),
   async (req, res, next) => {
     console.log(req.body);
-    
     try {
       const userServiceInstance = new UserService(UserModel);
       const startFarming = await userServiceInstance.farmReward(req.body);
