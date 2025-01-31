@@ -32,14 +32,10 @@ module.exports = class UserService {
 
   async farmReward(data) {
     const ts = new Date(); // timestamp
-
-    const formatDate = new Date(data.miningStartedTime);
-    const milliseconds = formatDate.getTime();
-
     const updateUser = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
       $set: {
         isMining: data.isMining,
-        miningStartedTime: milliseconds,
+        miningStartedTime: data.miningStartedTime,
         updated_at: ts
       },
       },
