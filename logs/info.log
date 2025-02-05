@@ -2714,3 +2714,14 @@
 2025-01-31 13:02:45 info: Success on : http://localhost:4000/api/v1/users/farm | status: 200
 2025-01-31 13:06:25 info: Success on : http://localhost:4000/api/v1/users/details/2635307 | status: 200
 2025-01-31 13:06:25 info: Success on : http://localhost:4000/api/v1/users/details/2635307 | status: 200
+2025-02-05 03:24:43 info: Success on : http://localhost:4000/api/v1/users/reward/claim | status: 200
+2025-02-05 03:25:05 info: Success on : http://localhost:4000/api/v1/auth/connect | status: 201
+2025-02-05 03:25:07 info: Success on : http://localhost:4000/api/v1/auth/nickname/validate | status: 200
+2025-02-05 03:25:07 info: Success on : http://localhost:4000/api/v1/auth/nickname/validate | status: 200
+2025-02-05 03:25:07 info: Success on : http://localhost:4000/api/v1/auth/nickname/validate | status: 200
+2025-02-05 03:25:08 info: Success on : http://localhost:4000/api/v1/auth/nickname/validate | status: 200
+2025-02-05 03:25:08 info: Success on : http://localhost:4000/api/v1/auth/nickname/validate | status: 200
+2025-02-05 03:25:08 info: Success on : http://localhost:4000/api/v1/auth/nickname/validate | status: 200
+2025-02-05 03:25:10 info: Success on : http://localhost:4000/api/v1/auth/nickname | status: 200
+2025-02-05 03:25:10 info: Success on : http://localhost:4000/api/v1/users/details/2917884 | status: 200
+2025-02-05 03:25:10 info: Success on : http://localhost:4000/api/v1/users/details/2917884 | status: 200
