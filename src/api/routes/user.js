@@ -18,8 +18,6 @@ const {
 
 router.get("/details/:userId",
   async (req, res, next) => {
-    console.log(req.params);
-    
     const { userId } = req.params
     try {
       const userServiceInstance = new UserService(UserModel);
@@ -51,8 +49,6 @@ router.put("/bonus/claim",
     }),
   }),
   async (req, res, next) => {
-    console.log(req.body);
-    
     try {
       const userServiceInstance = new UserService(UserModel);
       const claimBonus = await userServiceInstance.claimBonus(req.body);
@@ -71,8 +67,6 @@ router.put("/reward/claim",
     }),
   }),
   async (req, res, next) => {
-    console.log(req.body);
-    
     try {
       const userServiceInstance = new UserService(UserModel);
       const claimBonus = await userServiceInstance.claimReward(req.body);
@@ -92,7 +86,6 @@ router.post("/farm",
     }),
   }),
   async (req, res, next) => {
-    console.log(req.body);
     try {
       const userServiceInstance = new UserService(UserModel);
       const startFarming = await userServiceInstance.farmReward(req.body);

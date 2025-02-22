@@ -16,10 +16,6 @@ module.exports = class AuthService {
     }
 
     async CreateUser(data) {
-
-        console.log(data);
-        
-
         const checkExistingUser = await this.userModel.findOne({ id: data.id });
 
         if (checkExistingUser) {
@@ -35,6 +31,7 @@ module.exports = class AuthService {
             lastname: data.lastName,
             nickname: data.nickname,
             avatar: data.avatar,
+            color: data.color,
             referral_code: `vfm${data.userId}`
         });
 
