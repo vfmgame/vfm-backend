@@ -16,13 +16,10 @@ module.exports = class AuthService {
     }
 
     async CreateUser(data) {
-        const checkExistingUser = await this.userModel.findOne({ id: data.id });
+        const checkExistingUser = await this.userModel.findOne({ userId: data.userId });
 
-        if (checkExistingUser) {
-            delete checkExistingUser._doc._id;
-            delete checkExistingUser._doc.__v;
-            return checkExistingUser;
-        }
+        if (checkExistingUser) return checkExistingUser;
+        
 
         const userRecord = await this.userModel.create({
             id: await uuidv4(),

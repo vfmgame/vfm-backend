@@ -125,21 +125,25 @@ module.exports = class UserService {
   }
 
 
-  async CreateUserInfo(data, user_id) {
-    const userInfo = await this.userInfoModel.create({
-      id: await uuidv4(),
-      creator_id: user_id,
-      onboarding_completed: data.onboarding_completed,
-      problems_to_solve: data.problems_to_solve,
-      source_of_discovery: data.source_of_discovery
+  async UploadAvatar(data) {
+    const ts = new Date(); // timestamp
+
+    const updateAvatar = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
+      $set: {
+        avatar: data.avatar,
+        updated_at: ts
+      },
+      },
+      {
+        new: true
     });
 
-    if (!userInfo) {
-      let error = new Error("Cannot create userInfo, try again!");
+    if (!updateAvatar) {
+      let error = new Error("Cannot update userInfo, try again!");
       error.statusCode = 500;
       throw error;
     }
-    return userInfo;
+    return updateAvatar;
   }
 
 

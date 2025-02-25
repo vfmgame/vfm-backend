@@ -13,6 +13,7 @@ const {
   update_user_info
 
 } = require("../middleware/validator");
+const upload = require("../../helper/upload");
 
 
 
@@ -89,6 +90,18 @@ router.post("/farm",
     try {
       const userServiceInstance = new UserService(UserModel);
       const startFarming = await userServiceInstance.farmReward(req.body);
+      return sendResponse(req, res, 200, false, startFarming, "Farming request successful");
+    } catch (error) {
+      return next(error);
+    }
+});
+
+
+router.post("/upload/avatar", upload.single("avatar"),
+  async (req, res, next) => {
+    try {
+      const userServiceInstance = new UserService(UserModel);
+      const startFarming = await userServiceInstance.farmReward(req.file);
       return sendResponse(req, res, 200, false, startFarming, "Farming request successful");
     } catch (error) {
       return next(error);
