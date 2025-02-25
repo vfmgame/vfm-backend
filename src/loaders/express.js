@@ -14,7 +14,9 @@ module.exports = async (app) => {
 
   app.set("view engine", "ejs")
   app.set("views", [path.join(__dirname, "views",)])
-  app.use(express.static(__dirname + "/public"))
+  //app.use(express.static('/uploads'));
+  app.use('uploads', express.static(path.join(__dirname,'uploads')))
+  
 
 
   app.use((req, res, next) => {
@@ -48,6 +50,7 @@ module.exports = async (app) => {
     res.send("VFM Backend Service");
   });
 
+  //app.use("/uploads", express.static("uploads"))
   app.use("/api/v1/users", userRoutes);
   app.use("/api/v1/auth", authRoutes);
 
