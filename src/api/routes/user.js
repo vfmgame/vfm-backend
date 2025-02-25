@@ -13,13 +13,12 @@ const {
   update_user_info
 
 } = require("../middleware/validator");
+const upload = require("../../helper/upload");
 
 
 
 router.get("/details/:userId",
   async (req, res, next) => {
-    console.log(req.params);
-    
     const { userId } = req.params
     try {
       const userServiceInstance = new UserService(UserModel);
@@ -51,8 +50,6 @@ router.put("/bonus/claim",
     }),
   }),
   async (req, res, next) => {
-    console.log(req.body);
-    
     try {
       const userServiceInstance = new UserService(UserModel);
       const claimBonus = await userServiceInstance.claimBonus(req.body);
@@ -71,8 +68,6 @@ router.put("/reward/claim",
     }),
   }),
   async (req, res, next) => {
-    console.log(req.body);
-    
     try {
       const userServiceInstance = new UserService(UserModel);
       const claimBonus = await userServiceInstance.claimReward(req.body);
@@ -92,10 +87,21 @@ router.post("/farm",
     }),
   }),
   async (req, res, next) => {
-    console.log(req.body);
     try {
       const userServiceInstance = new UserService(UserModel);
       const startFarming = await userServiceInstance.farmReward(req.body);
+      return sendResponse(req, res, 200, false, startFarming, "Farming request successful");
+    } catch (error) {
+      return next(error);
+    }
+});
+
+
+router.post("/upload/avatar", upload.single("avatar"),
+  async (req, res, next) => {
+    try {
+      const userServiceInstance = new UserService(UserModel);
+      const startFarming = await userServiceInstance.farmReward(req.file);
       return sendResponse(req, res, 200, false, startFarming, "Farming request successful");
     } catch (error) {
       return next(error);

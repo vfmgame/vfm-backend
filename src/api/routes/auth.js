@@ -17,7 +17,6 @@ const {
 router.post("/connect",
   validate(connect_account),
   async (req, res, next) => {
-    console.log(req.body);
     try {
       const authServiceInstance = new AuthService(UserModel);
       const user = await authServiceInstance.CreateUser(req.body);

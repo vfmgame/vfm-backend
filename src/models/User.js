@@ -36,6 +36,9 @@ const UserSchema = new Schema({
 	avatar: {
 		type: String
 	},
+	color: {
+		type: String
+	},
 	claim: {
 		type: Number,
 		default: 0

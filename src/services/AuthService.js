@@ -16,17 +16,10 @@ module.exports = class AuthService {
     }
 
     async CreateUser(data) {
+        const checkExistingUser = await this.userModel.findOne({ userId: data.userId });
 
-        console.log(data);
+        if (checkExistingUser) return checkExistingUser;
         
-
-        const checkExistingUser = await this.userModel.findOne({ id: data.id });
-
-        if (checkExistingUser) {
-            delete checkExistingUser._doc._id;
-            delete checkExistingUser._doc.__v;
-            return checkExistingUser;
-        }
 
         const userRecord = await this.userModel.create({
             id: await uuidv4(),
@@ -35,6 +28,7 @@ module.exports = class AuthService {
             lastname: data.lastName,
             nickname: data.nickname,
             avatar: data.avatar,
+            color: data.color,
             referral_code: `vfm${data.userId}`
         });
 

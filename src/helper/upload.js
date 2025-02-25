@@ -1,25 +1,14 @@
 const multer = require("multer");
-// const fs = require("fs");
 
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, "uploads/");
-//     },
-    // filename: (req, file, cb) => {
-    //     cb(null, file.originalname)
-    // }
-//     filename: function (req, file, cb) {
-//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-//         cb(null, file.fieldname + '-' + uniqueSuffix)
-//     }
-// });
-
-// const upload = multer({
-//     storage: storage
-// });
-
-
-// module.exports = upload;
+const fileFilter = (req, file, cb) => {
+  const filetypes = /.jpeg|.jpg|.png|.webp/
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
+  if (extname) {
+    return cb(null, true);
+  } else {
+    cb('Error: jpeg, jpg, png and webp only!');
+  }
+};
 
 
 
@@ -30,12 +19,13 @@ const storage = multer.diskStorage({
     cb(null, `${process.cwd()}/src/uploads`);
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname)
-  }
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix);
+  },
 });
 
 // Create a multer instance with the storage options
-const upload = multer({ storage });
+const upload = multer({ storage, fileFilter });
 
 
 
