@@ -29,7 +29,8 @@ router.post("/connect",
 router.post("/nickname/validate",
   celebrate({
     body: Joi.object({
-      nickname: Joi.string().required()
+      nickname: Joi.string().required(),
+      userId: Joi.string().required()
     }),
   }),
   async (req, res, next) => {

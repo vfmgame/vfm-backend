@@ -97,12 +97,13 @@ router.post("/farm",
 });
 
 
-router.post("/upload/avatar", upload.single("avatar"),
+router.post("/upload/avatar", upload("avatars").single("avatar"),
   async (req, res, next) => {
+    console.log(req.file.filename);
     try {
       const userServiceInstance = new UserService(UserModel);
-      const startFarming = await userServiceInstance.farmReward(req.file);
-      return sendResponse(req, res, 200, false, startFarming, "Farming request successful");
+      const uploadAvatar = await userServiceInstance.UploadAvatar(req.file.filename, req.body.userId);
+      return sendResponse(req, res, 200, false, uploadAvatar, "Upload avatar successful");
     } catch (error) {
       return next(error);
     }

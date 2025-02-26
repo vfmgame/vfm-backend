@@ -125,12 +125,12 @@ module.exports = class UserService {
   }
 
 
-  async UploadAvatar(data) {
+  async UploadAvatar(avatar, userId) {
     const ts = new Date(); // timestamp
 
-    const updateAvatar = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
+    const updateAvatar = await this.userModel.findOneAndUpdate({ userId }, {
       $set: {
-        avatar: data.avatar,
+        avatar,
         updated_at: ts
       },
       },
