@@ -7,15 +7,15 @@ const path = require("path")
 const { authRoutes, userRoutes, } = require("../api");
 
 module.exports = async (app) => {
-  app.get("/status", (req, res) => { res.status(200).end(); });
-  app.head("/status", (req, res) => { res.status(200).end(); });
+  app.get("/status", (req, res) => { res.status(200).end()});
+  app.head("/status", (req, res) => { res.status(200).end()});
   app.enable("trust proxy");
   app.disable('x-powered-by'); // less hackers know about our stack
 
   app.set("view engine", "ejs")
-  app.set("views", [path.join(__dirname, "views",)])
-  //app.use(express.static('/uploads'));
-  app.use('uploads', express.static(path.join(__dirname,'uploads')))
+  app.set("views", [path.join(__dirname, "views",)]);
+  //app.use(express.static(__dirname + "/public"));
+  app.use("/assets/uploads/avatars", express.static(path.join(__dirname,"../assets/uploads/avatars" )));
   
 
 

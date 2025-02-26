@@ -97,7 +97,7 @@ router.post("/farm",
 });
 
 
-router.post("/upload/avatar", upload.single("avatar"),
+router.post("/upload/avatar", upload("avatars").single("avatar"),
   async (req, res, next) => {
     console.log(req.file.filename);
     try {
