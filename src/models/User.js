@@ -47,9 +47,14 @@ const UserSchema = new Schema({
 		type: Date,
 		require: false
 	},
+	login_times: {
+		type: Number,
+		default: 0
+	},
 	referred_by: {
 		type: String,
-		required: false
+		required: false,
+		default: ""
 	},
 	referral_earnings: {
 		type: Number,
@@ -65,7 +70,7 @@ const UserSchema = new Schema({
 		type: Object,
 		default: {
 			points: 0,
-			passes: 0
+			passes: 15
 		},
 		required: false
 	},
@@ -81,14 +86,6 @@ const UserSchema = new Schema({
 	mineRate: {
 		type: Number,
 		default: 0.6945
-	},
-	RESET_TOKEN: {
-		type: String,
-		required: false
-	},
-	RESET_TOKEN_TTL: {
-		type: Date,
-		required: false
 	},
 	claimed_bonus: {
 		type: Boolean,
@@ -113,3 +110,7 @@ const UserSchema = new Schema({
 
 const Users = mongoose.model("Users", UserSchema);
 module.exports = Users;
+
+
+// login_times
+// 

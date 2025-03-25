@@ -2,7 +2,7 @@ const pulse = require("../loaders/pulse");
 
 // list the different jobs availale throughout your app
 // if you are adding the job types dynamically and saving them in the database you will get it here
-let jobTypes = ["post","user"];
+let jobTypes = ["user"];
 
 // loop through the job_list folder and pass in the pulse instance
 jobTypes.forEach((type) => {

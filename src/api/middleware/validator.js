@@ -309,7 +309,9 @@ module.exports = {
 
     connect_account: [
         body("userId").isString().withMessage("userId cannot be empty").trim(),
-        body("nickname").isString().isLength(3).trim().withMessage("Full Name cannot be empty"),
+        body("firstname").isString().isLength(3).trim().withMessage("First Name cannot be empty"),
+        body("lastname").isString().isLength(3).trim().withMessage("Last Name cannot be empty"),
+        body("nickname").isString().isLength(3).trim().withMessage("Nickame cannot be empty"),
         body("referrer").isString().trim()
     ],
 
