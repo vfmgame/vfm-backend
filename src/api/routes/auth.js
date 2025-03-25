@@ -22,13 +22,10 @@ router.post("/connect",
     }),
   }),
   async (req, res, next) => {
-    console.log(req.body);
-    
-    
     try {
       const authServiceInstance = new AuthService(UserModel);
-      const user = await authServiceInstance.CreateUser(req.body);
-      return sendResponse(req, res, 201, false, user, "Account created successfully");
+      const user = await authServiceInstance.ConnectUser(req.body);
+      return sendResponse(req, res, 201, false, user, "Account created successfully")
     } catch (error) {
       console.log(error);
       return next(error);

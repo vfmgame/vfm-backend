@@ -23,12 +23,12 @@ authRouter.get("/details",
 });
 
 
-authRouter.get("/refers/:referralId",
+authRouter.get("/refers",
   async (req, res, next) => {
-    const { referralId } = req.params
+    const { referralId } = req.query;
     try {
       const userServiceInstance = new UserService(UserModel);
-      const userReferral = await userServiceInstance.fetchReferral(referralId);
+      const userReferral = await userServiceInstance.FetchReferral(referralId);
       return sendResponse(req, res, 200, false, userReferral, "Referral fetched!");
     } catch (error) {
       return next(error)

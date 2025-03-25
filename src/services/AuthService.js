@@ -14,7 +14,7 @@ module.exports = class AuthService {
       this.userModel = userModel;
     }
 
-    async CreateUser(data) {
+    async ConnectUser(data) {
         const checkExistingUser = await this.userModel.findOne({ userId: data.userId });
 
         if (checkExistingUser) {
@@ -27,12 +27,12 @@ module.exports = class AuthService {
             delete checkExistingUser._doc._id;
             delete checkExistingUser._doc.__v;
             checkExistingUser._doc.authorization = authorization;
+            checkExistingUser._doc.exists = true;
             checkExistingUser._doc.expires_in = 1200000;
             checkExistingUser._doc.expires_at = 12000000;
-
             return checkExistingUser;
         }
-        
+
 
         const userRecord = await this.userModel.create({
             id: await uuidv4(),
@@ -55,6 +55,7 @@ module.exports = class AuthService {
         delete userRecord._doc._id;
         delete userRecord._doc.__v;
         userRecord._doc.authorization = authorization;
+        userRecord._doc.exists = false;
         userRecord._doc.expires_in = 1200000;
         userRecord._doc.expires_at = 12000000;
 
@@ -69,8 +70,6 @@ module.exports = class AuthService {
 
 
     async CheckExistingUser(nickname, userId) {
-        console.log(userId);
-        
         const checkExistingUser = await this.userModel.findOne({ nickname });
         if (checkExistingUser && checkExistingUser.userId === userId) {
             return true;

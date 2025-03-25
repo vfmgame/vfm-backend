@@ -24,8 +24,8 @@ module.exports = class UserService {
     return fetchUser;
   }
 
-  async fetchReferral(referral_id) {
-    const referrals = await this.userModel.find({ referred_by: referral_id });
+  async FetchReferral(referralId) {
+    const referrals = await this.userModel.find({ referred_by: referralId });
     return referrals;
   }
 
