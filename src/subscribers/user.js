@@ -54,6 +54,14 @@ userEvents.on(user.signUp, async({ referred_by, userId }) => {
 });
 
 
+userEvents.on(user.verifyEmail, async({ user }) => {
+    console.log(user);
+    // await pulse.every("10 seconds", "check_user_trial", {
+    //   userID: user.main_id
+    // });
+});
+
+
 
 
 
