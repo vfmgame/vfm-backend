@@ -54,7 +54,7 @@ const UserSchema = new Schema({
 	referred_by: {
 		type: String,
 		required: false,
-		default: ""
+		default: null
 	},
 	referral_earnings: {
 		type: Number,

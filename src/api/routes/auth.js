@@ -13,12 +13,12 @@ router.post("/connect",
   celebrate({
     body: Joi.object({
       userId: Joi.string().required(),
-      firstname: Joi.string().required(),
-      lastname: Joi.string().required(),
+      firstname: Joi.string().optional(),
+      lastname: Joi.string().optional(),
       nickname: Joi.string().required(),
       color: Joi.string().required(),
       avatar: Joi.string().optional(),
-      referrer: Joi.string().optional()
+      referrer: Joi.optional()
     }),
   }),
   async (req, res, next) => {
