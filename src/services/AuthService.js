@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const { encrypt, generateRandomNDigits } = require("../helper");
-const axios = require("axios").default;
 const Secrets = require("../config");
 const userEvents = require("../subscribers/user");
 const events = require("../subscribers/events");
@@ -15,26 +14,50 @@ module.exports = class AuthService {
       this.userModel = userModel;
     }
 
-    async CreateUser(data) {
+    async ConnectUser(data) {
         const checkExistingUser = await this.userModel.findOne({ userId: data.userId });
 
-        if (checkExistingUser) return checkExistingUser;
-        
+        if (checkExistingUser) {
+            const jwt_payload = {
+                user_id: encrypt(checkExistingUser.userId.toString())
+            };
+    
+            const authorization = JWT.sign(jwt_payload, Secrets.JWT_TOKEN, { expiresIn: "23h" });
+    
+            delete checkExistingUser._doc._id;
+            delete checkExistingUser._doc.__v;
+            checkExistingUser._doc.authorization = authorization;
+            checkExistingUser._doc.exists = true;
+            checkExistingUser._doc.expires_in = 1200000;
+            checkExistingUser._doc.expires_at = 12000000;
+            return checkExistingUser;
+        }
+
 
         const userRecord = await this.userModel.create({
             id: await uuidv4(),
             userId: data.userId,
-            firstname: data.firstName,
-            lastname: data.lastName,
+            firstname: data.firstname,
+            lastname: data.lastname,
             nickname: data.nickname,
             avatar: data.avatar,
             color: data.color,
             referral_code: `vfm${data.userId}`
         });
 
+        const jwt_payload = {
+            user_id: encrypt(userRecord.userId.toString())
+        };
+
+        const authorization = JWT.sign(jwt_payload, Secrets.JWT_TOKEN, { expiresIn: "23h" });
+
 
         delete userRecord._doc._id;
         delete userRecord._doc.__v;
+        userRecord._doc.authorization = authorization;
+        userRecord._doc.exists = false;
+        userRecord._doc.expires_in = 1200000;
+        userRecord._doc.expires_at = 12000000;
 
         const user = userRecord;
 
@@ -46,9 +69,9 @@ module.exports = class AuthService {
     }
 
 
-    async CheckExistingUser(data) {
-        const checkExistingUser = await this.userModel.findOne({ nickname: data.nickname });
-        if (checkExistingUser && checkExistingUser.userId === data.userId) {
+    async CheckExistingUser(nickname, userId) {
+        const checkExistingUser = await this.userModel.findOne({ nickname });
+        if (checkExistingUser && checkExistingUser.userId === userId) {
             return true;
         } else if(checkExistingUser) {
             let error = new Error("Nickname is already taken...");

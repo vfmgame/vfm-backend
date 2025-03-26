@@ -1,5 +1,5 @@
-const bcrypt = require("bcryptjs");
-const { v4: uuidv4 } = require('uuid');
+const userEvents = require("../subscribers/user");
+const events = require("../subscribers/events");
 
 module.exports = class UserService {
   constructor(userModel, accountModel, subscriptionModel, userInfoModel, userSettingModel, linkedinModel) {
@@ -24,15 +24,38 @@ module.exports = class UserService {
     return fetchUser;
   }
 
-  async fetchReferral(referral_id) {
-    const referrals = await this.userModel.find({ referred_by: referral_id });
+  async FetchReferral(referralId) {
+    const referrals = await this.userModel.find({ referred_by: referralId });
     return referrals;
   }
 
 
-  async farmReward(data) {
+  async UpdateUserProfile(nickname, userId) {
     const ts = new Date(); // timestamp
-    const updateUser = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
+    const updateUser = await this.userModel.findOneAndUpdate({ userId }, {
+      $set: {
+        nickname: nickname,
+        updated_at: ts
+      },
+    },
+    {
+      new: true
+    });
+    if (!updateUser) {
+      let error = new Error("Could not set nickname! Try again!");
+      error.statusCode = 400;
+      throw error;
+    } else {
+      delete updateUser._doc._id;
+      delete updateUser._doc.__v;
+      return updateUser;
+    }
+  }
+
+
+  async FarmReward(data, userId) {
+    const ts = new Date(); // timestamp
+    const updateUser = await this.userModel.findOneAndUpdate({ userId }, {
       $set: {
         isMining: data.isMining,
         miningStartedTime: data.miningStartedTime,
@@ -52,14 +75,12 @@ module.exports = class UserService {
   }
 
 
-  async claimBonus(data) {
+  async ClaimBonus(bonus, userId) {
     const ts = new Date(); // timestamp
 
-    const updateUser = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
+    const updateUser = await this.userModel.findOneAndUpdate({ userId }, {
       $set: {
-        wallet: {
-          points: data.bonus
-        },
+        "wallet.points": bonus,
         claimed_bonus: true,
         updated_at: ts
       },
@@ -73,17 +94,18 @@ module.exports = class UserService {
       error.statusCode = 500;
       throw error;
     }
+
+    userEvents.dispatch(events.user.claimBonus, { userId, points: bonus });
     return updateUser;
   }
 
 
-  async claimReward(data) {
+  async ClaimReward(reward, userId) {
     const ts = new Date(); // timestamp
-
-    const updateUser = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
+    const updateUser = await this.userModel.findOneAndUpdate({ userId }, {
       $set: {
         wallet: {
-          points: data.reward
+          points: reward
         },
         isMining: false,
         miningStartedTime: null,

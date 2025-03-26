@@ -1,5 +1,5 @@
 const axios = require("axios").default;
-const AccountModel = require("../../models/Account");
+const AccountModel = require("../../models/User");
 
 
 const checkTrialPeriod = (pulse) => {

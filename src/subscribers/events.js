@@ -1,7 +1,7 @@
 module.exports = {
   user: {
     signUp: "user_signup",
-    signIn: "user_signin",
+    claimBonus: "user_claim_bonus",
     forgotPassword: "user_forgot_password",
     verifyEmail: "user_verify_email",
     resendVerifyEmail: "user_resend_verify_email",
