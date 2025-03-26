@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
         let timezone = req.headers["timezone"] ? req.headers["timezone"] : req.headers["Timezone"];
         let token = auth && auth.split(" ").length === 2 ? auth.split(" ")[1] : null;
         if(token) {
-            jwt.verify(token, Secrets.JWT_TOKEN, (err, decoded) => {
+            jwt.verify(token, "example", (err, decoded) => {
                 if(!err) {
                     let user = decoded;
                     if(user && user.user_id) {

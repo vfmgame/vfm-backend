@@ -22,7 +22,7 @@ module.exports = class AuthService {
                 user_id: encrypt(checkExistingUser.userId.toString())
             };
     
-            const authorization = JWT.sign(jwt_payload, Secrets.JWT_TOKEN, { expiresIn: "23h" });
+            const authorization = JWT.sign(jwt_payload, "example", { expiresIn: "23h" });
     
             delete checkExistingUser._doc._id;
             delete checkExistingUser._doc.__v;
@@ -49,7 +49,7 @@ module.exports = class AuthService {
             user_id: encrypt(userRecord.userId.toString())
         };
 
-        const authorization = JWT.sign(jwt_payload, Secrets.JWT_TOKEN, { expiresIn: "23h" });
+        const authorization = JWT.sign(jwt_payload, "exmaple", { expiresIn: "23h" });
 
 
         delete userRecord._doc._id;

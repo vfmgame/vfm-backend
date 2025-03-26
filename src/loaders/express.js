@@ -26,7 +26,7 @@ module.exports = async (app) => {
   });
   
   app.use(cors({
-      origin: [Secrets.LOCAL_BASE_URL, Secrets.LIVE_BASE_URL, Secrets.STAGING_BASE_URL, Secrets.STAGING_BASE_URL],
+      origin: ["http://localhost:3000", "https://app.vfmserver.com"],
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true
     }
