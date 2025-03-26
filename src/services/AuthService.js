@@ -24,12 +24,12 @@ module.exports = class AuthService {
     
             const authorization = JWT.sign(jwt_payload, "example", { expiresIn: "23h" });
     
-            delete checkExistingUser._id;
-            delete checkExistingUser.__v;
-            checkExistingUser.authorization = authorization;
-            checkExistingUser.exists = true;
-            checkExistingUser.expires_in = 1200000;
-            checkExistingUser.expires_at = 12000000;
+            delete checkExistingUser._doc._id;
+            delete checkExistingUser._doc.__v;
+            checkExistingUser._doc.authorization = authorization;
+            checkExistingUser._doc.exists = true;
+            checkExistingUser._doc.expires_in = 1200000;
+            checkExistingUser._doc.expires_at = 12000000;
             return checkExistingUser;
         }
 
@@ -52,12 +52,12 @@ module.exports = class AuthService {
         const authorization = JWT.sign(jwt_payload, "exmaple", { expiresIn: "23h" });
 
 
-        delete userRecord._id;
-        delete userRecord.__v;
-        userRecord.authorization = authorization;
-        userRecord.exists = false;
-        userRecord.expires_in = 1200000;
-        userRecord.expires_at = 12000000;
+        delete userRecord._doc._id;
+        delete userRecord._doc.__v;
+        userRecord._doc.authorization = authorization;
+        userRecord._doc.exists = false;
+        userRecord._doc.expires_in = 1200000;
+        userRecord._doc.expires_at = 12000000;
 
         const user = userRecord;
 
