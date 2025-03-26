@@ -6,7 +6,7 @@ const pulseConfig = {
   processEvery: "1 minute",
   maxConcurrency: 10,
   db: {
-    address: Secrets.DATABASE_LIVE_URL,
+    address: "mongodb+srv://essien:Coding3719.@cluster0.ygjpk.mongodb.net/vfm?retryWrites=true&w=majority&appName=Cluster0",
     collection: 'jobs'
   },
   resumeOnRestart: true
