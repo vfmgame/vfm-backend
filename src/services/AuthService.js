@@ -17,12 +17,12 @@ module.exports = class AuthService {
     async ConnectUser(data) {
         const checkExistingUser = await this.userModel.findOne({ userId: data.userId });
 
+        const jwt_payload = {
+            user_id: encrypt(data.userId.toString())
+        };
+
         if (checkExistingUser) {
-            const jwt_payload = {
-                user_id: encrypt(checkExistingUser.userId.toString())
-            };
-    
-            const authorization = JWT.sign(jwt_payload, Secrets.JWT_TOKEN, { expiresIn: "23h" });
+            const authorization = JWT.sign(jwt_payload, "example", { expiresIn: "23h" });
     
             delete checkExistingUser._doc._id;
             delete checkExistingUser._doc.__v;
@@ -45,12 +45,7 @@ module.exports = class AuthService {
             referral_code: `vfm${data.userId}`
         });
 
-        const jwt_payload = {
-            user_id: encrypt(userRecord.userId.toString())
-        };
-
-        const authorization = JWT.sign(jwt_payload, Secrets.JWT_TOKEN, { expiresIn: "23h" });
-
+        const authorization = JWT.sign(jwt_payload, "example", { expiresIn: "23h" });
 
         delete userRecord._doc._id;
         delete userRecord._doc.__v;
