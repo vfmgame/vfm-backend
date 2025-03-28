@@ -108,9 +108,12 @@ const UserSchema = new Schema({
 	}
 });
 
+UserSchema.methods.toJSON = function () {
+	let userObject = this.toObject();
+	delete userObject.__v;
+	delete userObject._id;
+	return userObject;
+};
+
 const Users = mongoose.model("Users", UserSchema);
 module.exports = Users;
-
-
-// login_times
-// 
