@@ -56,9 +56,7 @@ module.exports = class AuthService {
 
         const user = userRecord;
 
-        if(data.referrer) {
-            userEvents.dispatch(events.user.signUp, { referred_by: data.referrer, userId: user.userId });
-        }
+        userEvents.dispatch(events.user.signUp, { referred_by: data.referrer, userId: user.userId });
         
         return user;
     }
