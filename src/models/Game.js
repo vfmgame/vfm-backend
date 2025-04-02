@@ -26,7 +26,7 @@ const GameSchema = new Schema({
     },
     minute: {
         type: Number,
-        default: 0
+        default: 2
     },
     seconds: {
         type: Number,
