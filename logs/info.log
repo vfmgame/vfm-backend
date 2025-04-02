@@ -16642,3 +16642,6 @@
 2025-04-02 21:57:04 info: Success on : http://localhost:4000/api/v1/users/bonus/claim | status: 200
 2025-04-02 21:57:09 info: Success on : http://localhost:4000/api/v1/users/details | status: 200
 2025-04-02 21:57:10 info: Success on : http://localhost:4000/api/v1/users/details | status: 200
+2025-04-02 22:37:17 info: Success on : http://localhost:4000/api/v1/games/score | status: 200
+2025-04-02 22:37:29 info: Success on : http://localhost:4000/api/v1/games/score | status: 200
+2025-04-02 22:38:36 info: Success on : http://localhost:4000/api/v1/games/score | status: 200
