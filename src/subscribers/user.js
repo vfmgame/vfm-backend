@@ -68,7 +68,7 @@ userEvents.on(user.signUp, async({ referred_by, userId }) => {
             id: await uuidv4(),
             userId,
             type: "social",
-            task: "https://facebook.com/boringcreatives",
+            task: "https://web.facebook.com/FilipinoHouseDesignPH",
             description: "Subscribe to us on Facebook",
             reward: 150000
         }),
@@ -76,15 +76,15 @@ userEvents.on(user.signUp, async({ referred_by, userId }) => {
             id: await uuidv4(),
             userId,
             type: "social",
-            task: "https://facebook.com/boringcreatives",
+            task: "https://t.me/Engineering_EBooks",
             description: "Join our TG-Community",
-            reward: 150000
+            reward: 500000
         }),
         TaskModel.create({
             id: await uuidv4(),
             userId,
             type: "social",
-            task: "https://youtube.com/boringcreatives",
+            task: "https://www.youtube.com/channel/UCbCmjCuTUZos6Inko4u57UQ",
             description: "Watch us on Youtube",
             reward: 200000
         }),
@@ -92,7 +92,7 @@ userEvents.on(user.signUp, async({ referred_by, userId }) => {
             id: await uuidv4(),
             userId,
             type: "social",
-            task: "https://x.com/boringcreatives",
+            task: "https://x.com/CodeRigiAcademy",
             description: "Check our X account",
             reward: 300000
         }),

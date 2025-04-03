@@ -2,13 +2,8 @@ const userEvents = require("../subscribers/user");
 const events = require("../subscribers/events");
 
 module.exports = class UserService {
-  constructor(userModel, accountModel, subscriptionModel, userInfoModel, userSettingModel, linkedinModel) {
+  constructor(userModel) {
     this.userModel = userModel;
-    this.accountModel = accountModel;
-    this.subscriptionModel = subscriptionModel;
-    this.userInfoModel = userInfoModel;
-    this.userSettingModel = userSettingModel;
-    this.linkedinModel = linkedinModel;
   }
 
 
