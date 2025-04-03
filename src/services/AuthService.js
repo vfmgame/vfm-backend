@@ -27,7 +27,6 @@ module.exports = class AuthService {
             delete checkExistingUser._doc._id;
             delete checkExistingUser._doc.__v;
             checkExistingUser._doc.authorization = authorization;
-            checkExistingUser._doc.exists = true;
             checkExistingUser._doc.expires_in = 1200000;
             checkExistingUser._doc.expires_at = 12000000;
             return checkExistingUser;
@@ -50,7 +49,6 @@ module.exports = class AuthService {
         delete userRecord._doc._id;
         delete userRecord._doc.__v;
         userRecord._doc.authorization = authorization;
-        userRecord._doc.exists = false;
         userRecord._doc.expires_in = 1200000;
         userRecord._doc.expires_at = 12000000;
 
@@ -82,6 +80,8 @@ module.exports = class AuthService {
         const updateUser = await this.userModel.findOneAndUpdate({ userId: data.userId }, {
             $set: {
                 nickname: data.nickname,
+                user_verified: true,
+                user_verified_at: ts,
                 updated_at: ts
             },
         },
