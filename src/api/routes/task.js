@@ -14,7 +14,7 @@ authRouter.get("/",
   async (req, res, next) => {
     try {
       const taskServiceInstance = new TaskService(TaskModel, UserModel);
-      const tasks = await taskServiceInstance.GetUserTasks(req.user.user_id);
+      const tasks = await taskServiceInstance.GetUserTasks(req.user.userId);
       return sendResponse(req, res, 200, false, tasks, "Tasks fetched!");
     } catch (error) {
       return next(error)
@@ -32,7 +32,7 @@ authRouter.put("/",
   async (req, res, next) => {
     try {
       const taskServiceInstance = new TaskService(TaskModel, UserModel);
-      const tasks = await taskServiceInstance.CompleteTask(req.body, req.user.user_id);
+      const tasks = await taskServiceInstance.CompleteTask(req.body, req.user.userId);
       return sendResponse(req, res, 200, false, tasks, "Task updated!");
     } catch (error) {
       return next(error)

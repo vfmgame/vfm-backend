@@ -1,28 +1,22 @@
-const { addUser } = require("../helper");
+const { addUser, checkCurrentDate, getNumberOfDays } = require("../helper");
+const UserModel = require("../models/User");
+
 
 module.exports = (io, socket) => {
-  // const createOrder = (payload, callback) => {
-  //   console.log(payload);
-  //   // ...
-  //   const { error, user } = addUser({ id: payload.email, email: payload.email, room: payload.id });
+  const storeUser = (payload, callback) => {
+    console.log(payload);
+    const { error, user } = addUser({ id: payload.id, userName: payload.userName, room: payload.userId });
 
-  //   //console.log(user)
-      
-  //   if(error) return callback(error)
+    console.log(user)
+    if(error) return callback(error);
 
-  //   socket.join(user.room);
-
-  //   // socket.emit('message', { user: 'admin', text: `${user.email}, welcome to room ${user.room}.`});
-  //   // socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.email} has joined!` });
-
-  //   // io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
-
-  //   callback();
-  //   console.log("Order created!");
-  // }
+    socket.join(user.room);
+    callback();
+    console.log("User added!");
+  }
 
   // countDuplicateProspects = async (payload) => {
-  //   const prospects = await ProspectModel.findOne({ user_id: payload.id, name: payload.list }).$where("prospects").elemMatch({ handle })
+  //   const prospects = await ProspectModel.findOne({ userId: payload.id, name: payload.list }).$where("prospects").elemMatch({ handle })
   //   const counts = {};
   
   //   // Iterate through the array
@@ -44,54 +38,88 @@ module.exports = (io, socket) => {
   
   //   return duplicateCount;
   // }
+
+
+  // await UserModel.findOneAndUpdate({ userId: payload.userId }, {
+        //   $inc: { "wallet.points": 10, "wallet.passes": 5 },
+        //   $set: {
+        //     checkedInDays: numberOfDays,
+        //     checkedIn: true,
+        //     lastCheckedIn: ts,
+        //     updatedAt: ts
+        //   }},
+        // {new: true});
   
   
-  // const addProspects = async (payload, callback) => {
-  //   //console.log(payload);
-  //   const ts = new Date(); // timestamp .select({'locations.$': 1});
-  //   const prospect = await ProspectModel.findOne({user_id: payload.id, name: payload.list });
-  //   const checkDuplicate = prospect.prospects.some(obj => obj.handle === payload.profile.handle);
-  //   //findOne({ user_id: payload.id, name: payload.list }, {"prospects.handle":  payload.handle});
-  //   if(checkDuplicate) {
-  //     //console.log("56");
-  //     console.log(checkDuplicate);
-  //     let count = 1;
-  //     console.log(count++);
-  //     io.to(payload.id).emit("prospect:duplicate", { count: 1 });
-  //   } else {
-  //     await ProspectModel.findOneAndUpdate({ user_id: payload.id, name: payload.list }, {$addToSet: { prospects: payload.profile }, $set: { page: payload.page, updated_at: ts }}, {upsert: true});
-  //   }
-    
-  //   //await ProspectModel.findOneAndUpdate({ user_id: payload.id, name: payload.list }, {$addToSet: { prospects: payload.profile }, $set: { page: payload.page, updated_at: ts }}, {upsert: true});
-  //     // ...
-    
-  //   //console.log(payload);
+  const calculateUserBonus = async (payload, callback) => {
+    console.log(payload);
+    const ts = new Date();
+    const numberOfDays = getNumberOfDays(payload.lastCheckedIn, Date.now());
+    const currentDay = checkCurrentDate(Date.now(), payload.lastCheckedIn);
+    console.log(currentDay);
+    //let newCheckInDay = payload.checkedInDays;
 
+    if(numberOfDays !== payload.checkedInDays && currentDay === true && payload.checkedIn === false) {
+      console.log(numberOfDays, "Yes");
+      if(numberOfDays === 1) {
+        callback({
+          points: 10,
+          passes: 5,
+          numberOfDays
+        });
+      } else if(numberOfDays === 2) {
+        callback({
+          points: 20,
+          passes: 5,
+          numberOfDays
+        });
+      } else if(numberOfDays === 3) {
+        callback({
+          points: 30,
+          passes: 5,
+          numberOfDays
+        });
 
-  //   // Listen for changes
-  //   // ProspectModel.watch().on("change", (data) => {
-  //   //   if(data) {
-  //   //    //io.to(payload.id).emit("prospect:duplicates", { count: 1 });
-  //   //    //callback({ count: 1 })
-  //   //   }
-  //   //   //console.log(new Date(), data);
-  //   // });
+      } else if(numberOfDays === 4) {
+        callback({
+          points: 40,
+          passes: 5,
+          numberOfDays
+        });
 
-  //   // const prospect1 = await ProspectModel.create({
-  //   //   user_id: "RCP3W2UR6Z24",
-  //   //   name: "Awilo"
-  //   // });
+      } else if(numberOfDays === 5) {
+        callback({
+          points: 50,
+          passes: 5,
+          numberOfDays
+        });
 
-  //   //{ $set: { page: payload.page, updated_at: ts } },
-
-  //   //const prospect = await ProspectModel.findOneAndUpdate({ user_id: payload.id, name: payload.list }, {$addToSet: { prospects: payload.profile }, $set: { page: payload.page, updated_at: ts }}, {upsert: true});
-  //   //const prospect = await ProspectModel.findOne({ user_id: payload.id, name: payload.list })
-  //   //console.log(prospect);
-      
-  // }
+      } else if(numberOfDays === 6) {
+        callback({
+          points: 60,
+          passes: 5,
+          numberOfDays
+        });
+      } else if(numberOfDays === 7) {
+        callback({
+          points: 70,
+          passes: 5,
+          numberOfDays
+        });
+      } else if(numberOfDays > 7) {
+        callback({
+          points: 70,
+          passes: 5,
+          numberOfDays
+        });
+      }
+    } else {
+      console.log(" This is true");
+    }
+  }
   
-  // socket.on("add_user", createOrder);
-  // socket.on("prospect:add", addProspects);
+  socket.on("add_user", storeUser);
+  socket.on("user_bonus:check", calculateUserBonus);
   // socket.on("prospect:save", addProspects);
-  //socket.on("prospect:duplicates", countDuplicateProspects);
+  // socket.on("prospect:duplicates", countDuplicateProspects);
 }

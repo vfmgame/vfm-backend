@@ -5,7 +5,8 @@ const { sendResponse } = require("./ResponseHelper");
 const { addUser, removeUser, getUser, getUsersInRoom } = require("./userHelper");
 const generateRandomNDigits = require("./tokenGenerator");
 const { encrypt, decrypt } = require("./encryption");
-const prepStream = require("./eventStream")
+const prepStream = require("./eventStream");
+const {getNumberOfDays, checkCurrentDate} = require("./dateCalculator");
 
 
 // const EXTEND_PERIOD = (
@@ -37,5 +38,7 @@ module.exports = {
 	encrypt,
 	decrypt,
 	prepStream,
-	generateRandomNDigits
+	generateRandomNDigits,
+	getNumberOfDays,
+	checkCurrentDate
 }

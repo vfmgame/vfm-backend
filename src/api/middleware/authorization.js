@@ -3,7 +3,7 @@ const { user } = require("../../subscribers/events");
 
 module.exports = async (req, res, next) => {
     try {
-        const userId = req.user.user_id
+        const userId = req.user.userId
 
         const user_details = await UserModel.findOne({ userId });
 

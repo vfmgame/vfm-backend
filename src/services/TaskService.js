@@ -19,7 +19,7 @@ module.exports = class GameService {
     const updateTask = await this.taskModel.findOneAndUpdate({ id: data.id }, {
       $set: {
         status: true,
-        updated_at: ts
+        updatedAt: ts
       },
     },
     {
@@ -28,7 +28,7 @@ module.exports = class GameService {
 
     const updateUserWallet = await this.userModel.findOneAndUpdate({ userId }, {
       $inc: { "wallet.points": data.reward },
-      $set: { updated_at: ts },
+      $set: { updatedAt: ts },
     },
     {
       new: true
