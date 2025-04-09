@@ -1,15 +1,15 @@
 const users = [];
 
-const addUser = ({ id, email, room }) => {
-  email = email;
+const addUser = ({ id, userName, room }) => {
+  userName = userName;
   room = room;
 
-  const existingUser = users.find((user) => user.room === room && user.email === email);
+  const existingUser = users.find((user) => user.room === room && user.userName === userName);
 
-  if(!email || !room) return { error: 'Email and room are required.' };
-  if(existingUser) return { error: 'Email is taken.' };
+  if(!userName || !room) return { error: "Username and room are required." };
+  if(existingUser) return { error: "Username is taken." };
 
-  const user = { id, email, room };
+  const user = { id, userName, room };
 
   users.push(user);
 
@@ -18,7 +18,6 @@ const addUser = ({ id, email, room }) => {
 
 const removeUser = (id) => {
   const index = users.findIndex((user) => user.id === id);
-
   if(index !== -1) return users.splice(index, 1)[0];
 }
 

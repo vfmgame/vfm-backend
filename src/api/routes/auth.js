@@ -13,9 +13,9 @@ router.post("/connect",
   celebrate({
     body: Joi.object({
       userId: Joi.string().required(),
-      firstname: Joi.string().optional(),
-      lastname: Joi.string().optional(),
-      nickname: Joi.string().required(),
+      firstName: Joi.string().optional(),
+      lastName: Joi.string().optional(),
+      nickName: Joi.string().required(),
       color: Joi.string().required(),
       avatar: Joi.string().optional(),
       referrer: Joi.optional()
@@ -35,15 +35,13 @@ router.post("/connect",
 authRouter.post("/nickname/validate",
   celebrate({
     body: Joi.object({
-      nickname: Joi.string().required()
+      nickName: Joi.string().required()
     }),
   }),
   async (req, res, next) => {
-    console.log(req.user);
-    console.log(req.body);
     try {
       const authServiceInstance = new AuthService(UserModel);
-      const user = await authServiceInstance.CheckExistingUser(req.body.nickname, req.user.user_id);
+      const user = await authServiceInstance.CheckExistingUser(req.body.nickName, req.user.userId);
       return sendResponse(req, res, 200, false, user, "Nickname is available...");
     } catch (error) {
       console.log(error);

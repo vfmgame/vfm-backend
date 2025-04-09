@@ -19,15 +19,15 @@ const UserSchema = new Schema({
         type: String,
         unique: true
     },
-	firstname: {
+	firstName: {
 		type: String,
 		trim: true
 	},
-	lastname: {
+	lastName: {
 		type: String,
 		trim: true
 	},
-	nickname: {
+	nickName: {
 		type: String,
 		unique: 'Two users cannot share the same nickname ({VALUE})',
 		trim: true,
@@ -43,25 +43,29 @@ const UserSchema = new Schema({
 		type: Number,
 		default: 0
 	},
-	last_login: {
+	lastCheckedIn: {
 		type: Date,
-		require: false
+		default: Date.now()
 	},
-	login_times: {
+	checkedIn: {
+		type: Boolean,
+		default: false
+	},
+	checkedInDays: {
 		type: Number,
 		default: 0
 	},
-	referred_by: {
+	referredBy: {
 		type: String,
 		required: false,
 		default: null
 	},
-	referral_earnings: {
+	referralEarnings: {
 		type: Number,
 		default: 0,
 		required: false
 	},
-	referral_code: {
+	referralCode: {
 		type: String,
 		required: false,
 		unique: true
@@ -87,22 +91,22 @@ const UserSchema = new Schema({
 		type: Number,
 		default: 0.6945
 	},
-	claimed_bonus: {
+	claimedBonus: {
 		type: Boolean,
 		default: false
 	},
-	user_verified: {
+	userVerified: {
 		type: Boolean,
 		default: false
 	},
-	user_verified_at: {
+	userVerifiedAt: {
 		type: Date
 	},
-	created_at: {
+	createdAt: {
 		type: Date,
 		default: Date.now()
 	},
-	updated_at: {
+	updatedAt: {
 		type: Date,
 		default: Date.now()
 	}

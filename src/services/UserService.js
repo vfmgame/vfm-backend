@@ -20,17 +20,21 @@ module.exports = class UserService {
   }
 
   async FetchReferral(referralId) {
-    const referrals = await this.userModel.find({ referred_by: referralId });
+    const referrals = await this.userModel.find({ referredBy: referralId });
+    console.log(referrals);
+    
     return referrals;
   }
 
 
-  async UpdateUserProfile(nickname, userId) {
+  async UpdateUserProfile(nickName, userId) {
     const ts = new Date(); // timestamp
     const updateUser = await this.userModel.findOneAndUpdate({ userId }, {
       $set: {
-        nickname: nickname,
-        updated_at: ts
+        nickName: nickName,
+        userVerified: true,
+        userVerifiedAt: ts,
+        updatedAt: ts
       },
     },
     {
@@ -40,11 +44,9 @@ module.exports = class UserService {
       let error = new Error("Could not set nickname! Try again!");
       error.statusCode = 400;
       throw error;
-    } else {
-      delete updateUser._doc._id;
-      delete updateUser._doc.__v;
-      return updateUser;
     }
+
+    return updateUser;
   }
 
 
@@ -54,7 +56,7 @@ module.exports = class UserService {
       $set: {
         isMining: data.isMining,
         miningStartedTime: data.miningStartedTime,
-        updated_at: ts
+        updatedAt: ts
       },
       },
       {
@@ -76,8 +78,8 @@ module.exports = class UserService {
     const updateUser = await this.userModel.findOneAndUpdate({ userId }, {
       $set: {
         "wallet.points": bonus,
-        claimed_bonus: true,
-        updated_at: ts
+        claimedBonus: true,
+        updatedAt: ts
       },
       },
       {
@@ -98,13 +100,11 @@ module.exports = class UserService {
   async ClaimReward(reward, userId) {
     const ts = new Date(); // timestamp
     const updateUser = await this.userModel.findOneAndUpdate({ userId }, {
+      $inc: { "wallet.points": reward },
       $set: {
-        wallet: {
-          points: reward
-        },
         isMining: false,
         miningStartedTime: null,
-        updated_at: ts
+        updatedAt: ts
       },
       },
       {
@@ -120,13 +120,37 @@ module.exports = class UserService {
   }
 
 
+  async ClaimDailyReward(data, userId) {
+    const ts = new Date(); // timestamp
+    const updateBonus = await this.userModel.findOneAndUpdate({ userId }, {
+      $inc: { "wallet.points": data.points, "wallet.passes": data.passes,  },
+      $set: { 
+        checkedInDays: data.numberOfDays,
+        checkedIn: true,
+        lastCheckedIn: ts,
+        updatedAt: ts
+      },
+      },
+      {
+        new: true
+    });
+
+    if (!updateBonus) {
+      let error = new Error("Something went wrong. Try again.");
+      error.statusCode = 500;
+      throw error;
+    }
+    return updateBonus;
+  }
+
+
   async UpdateNotificationChannels(data, channel) {
     const ts = new Date(); // timestamp
 
     const updateNotificationChannels = await this.userModel.findOneAndUpdate({ email: data.email }, {
       $set: {
         notification_channel: channel,
-        updated_at: ts
+        updatedAt: ts
       },
       },
       {
@@ -148,7 +172,7 @@ module.exports = class UserService {
     const updateAvatar = await this.userModel.findOneAndUpdate({ userId }, {
       $set: {
         avatar,
-        updated_at: ts
+        updatedAt: ts
       },
       },
       {
@@ -167,12 +191,12 @@ module.exports = class UserService {
   async UpdateUserInfo(data) {
     const ts = new Date(); // timestamp
 
-    const updateUserInfo = await this.userInfoModel.findOneAndUpdate({ user_id: data.id }, {
+    const updateUserInfo = await this.userInfoModel.findOneAndUpdate({ userId: data.id }, {
       $set: {
         onboarding_completed: data.onboarding_completed,
         problems_to_solve: data.problems_to_solve,
         source_of_discovery: data.source_of_discovery,
-        updated_at: ts
+        updatedAt: ts
       },
       },
       {
@@ -187,8 +211,8 @@ module.exports = class UserService {
     return updateUserInfo;
   }
 
-  async FetchUserInfo(user_id) {
-    const fetchUserInfo = await this.userInfoModel.findOne({ creator_id: user_id });
+  async FetchUserInfo(userId) {
+    const fetchUserInfo = await this.userInfoModel.findOne({ creator_id: userId });
     return fetchUserInfo;
   }
 
@@ -205,7 +229,7 @@ module.exports = class UserService {
         role: data.role,
         topics: data.topics,
         workspace_id: data.workspace_id,
-        updated_at: ts
+        updatedAt: ts
       },
       },
       {

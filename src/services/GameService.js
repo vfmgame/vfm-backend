@@ -20,7 +20,7 @@ module.exports = class GameService {
       $set: {
         score: data.score,
         paused: data.paused,
-        updated_at: ts
+        updatedAt: ts
       },
     },
     {

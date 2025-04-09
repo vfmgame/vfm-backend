@@ -55,7 +55,7 @@
     "puppeteer": "^21.6.0",
     "rand-token": "^1.0.1",
     "referral-codes": "^2.0.2",
-    "socket.io": "^4.7.2",
+    "socket.io": "^4.8.1",
     "stripe": "^12.18.0",
     "uuid": "^9.0.1",
     "uuidv4": "^6.2.13",

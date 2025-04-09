@@ -12,8 +12,8 @@ module.exports = (req, res, next) => {
             jwt.verify(token, "example", (err, decoded) => {
                 if(!err) {
                     let user = decoded;
-                    if(user && user.user_id) {
-                        user.user_id = decrypt(user.user_id);
+                    if(user && user.userId) {
+                        user.userId = decrypt(user.userId);
                         user.timezone = timezone;
                         req["user"] = user;
                         next();

@@ -14,7 +14,7 @@ authRouter.get("/score",
   async (req, res, next) => {
     try {
       const gameServiceInstance = new GameService(GameModel, UserModel);
-      const gameScore = await gameServiceInstance.GetUserScore(req.user.user_id);
+      const gameScore = await gameServiceInstance.GetUserScore(req.user.userId);
       return sendResponse(req, res, 200, false, gameScore, "Game score fetched!");
     } catch (error) {
       return next(error)
@@ -26,7 +26,7 @@ authRouter.put("/score",
   async (req, res, next) => {
     try {
       const gameServiceInstance = new GameService(GameModel, UserModel);
-      const gameScore = await gameServiceInstance.AddUserScore(req.user.user_id);
+      const gameScore = await gameServiceInstance.AddUserScore(req.user.userId);
       return sendResponse(req, res, 200, false, gameScore, "Game score updated!");
     } catch (error) {
       return next(error)
