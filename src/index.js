@@ -10,7 +10,7 @@ async function startServer() {
   const server = http.createServer(app);
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: "https://app.vfmserver.com",
       methods: ["GET", "POST", "PUT"]
     }
   })

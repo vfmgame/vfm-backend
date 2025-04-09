@@ -26,7 +26,7 @@ module.exports = async (app) => {
   });
   
   app.use(cors({
-      origin: ["http://localhost:3000", "https://app.vfmserver.com"],
+      origin: ["http://localhost:3000", "https://app.vfmserver.com", "https://www.app.vfmserver.com"],
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true
     }
