@@ -27,6 +27,7 @@ authRouter.put("/",
     body: Joi.object({
       id: Joi.string().required(),
       reward: Joi.number().required(),
+      passes: Joi.number().required()
     }),
   }),
   async (req, res, next) => {

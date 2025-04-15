@@ -74,7 +74,7 @@ const UserSchema = new Schema({
 		type: Object,
 		default: {
 			points: 0,
-			passes: 15
+			passes: 3
 		},
 		required: false
 	},
@@ -89,7 +89,7 @@ const UserSchema = new Schema({
 	},
 	mineRate: {
 		type: Number,
-		default: 0.6945
+		default: 0.0021
 	},
 	claimedBonus: {
 		type: Boolean,
