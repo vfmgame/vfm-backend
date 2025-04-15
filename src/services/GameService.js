@@ -2,35 +2,36 @@ const userEvents = require("../subscribers/user");
 const events = require("../subscribers/events");
 
 module.exports = class GameService {
-  constructor(gameModel, userModel) {
-    this.gameModel = gameModel;
+  constructor(userModel) {
     this.userModel = userModel;
   }
 
-    
-  async GetUserScore(userId) {
-    const fetchUserScore = await this.gameModel.findOne({ userId });
-    return fetchUserScore;
-  }
-
-
-  async AddUserScore(data, userId) {
+  async StartGame(userId) {
     const ts = new Date(); // timestamp
-    const updateUserScore = await this.gameModel.findOneAndUpdate({ userId }, {
+    const deductedPlayPasses = await this.userModel.findOneAndUpdate({ userId }, {
+      $inc: {"wallet.passes": - 1},
       $set: {
-        score: data.score,
-        paused: data.paused,
         updatedAt: ts
       },
     },
     {
       new: true
     });
-    if (!updateUserScore) {
-      let error = new Error("Could not set nickname! Try again!");
-      error.statusCode = 400;
-      throw error;
-    }
+    return deductedPlayPasses;
+  }
+
+
+  async AddUserScore(points, userId) {
+    const ts = new Date(); // timestamp
+    const updateUserScore = await this.userModel.findOneAndUpdate({ userId }, {
+      $inc: { "wallet.points": points},
+      $set: {
+        updatedAt: ts
+      },
+    },
+    {
+      new: true
+    });
     return updateUserScore;
   }
 }

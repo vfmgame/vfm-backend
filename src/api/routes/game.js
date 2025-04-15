@@ -1,7 +1,6 @@
 const { Router  } = require("express");
 const { celebrate, Joi } = require("celebrate");
 const UserModel = require("../../models/User");
-const GameModel = require("../../models/Game");
 const GameService = require("../../services/GameService");
 const { sendResponse } = require("../../helper/ResponseHelper");
 const { authentication, authorization } = require("../middleware");
@@ -13,7 +12,7 @@ const authRouter = Router();
 authRouter.get("/score",
   async (req, res, next) => {
     try {
-      const gameServiceInstance = new GameService(GameModel, UserModel);
+      const gameServiceInstance = new GameService(UserModel);
       const gameScore = await gameServiceInstance.GetUserScore(req.user.userId);
       return sendResponse(req, res, 200, false, gameScore, "Game score fetched!");
     } catch (error) {
@@ -22,11 +21,28 @@ authRouter.get("/score",
 });
 
 
-authRouter.put("/score",
+authRouter.post("/start",
   async (req, res, next) => {
     try {
-      const gameServiceInstance = new GameService(GameModel, UserModel);
-      const gameScore = await gameServiceInstance.AddUserScore(req.user.userId);
+      const gameServiceInstance = new GameService(UserModel);
+      const gameScore = await gameServiceInstance.StartGame(req.user.userId);
+      return sendResponse(req, res, 200, false, gameScore, "Game started!");
+    } catch (error) {
+      return next(error)
+    }
+});
+
+
+authRouter.put("/score",
+  celebrate({
+    body: Joi.object({
+      points: Joi.number().required()
+    }),
+  }),
+  async (req, res, next) => {
+    try {
+      const gameServiceInstance = new GameService(UserModel);
+      const gameScore = await gameServiceInstance.AddUserScore(req.body.points, req.user.userId);
       return sendResponse(req, res, 200, false, gameScore, "Game score updated!");
     } catch (error) {
       return next(error)

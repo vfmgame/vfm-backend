@@ -21,6 +21,11 @@ const TaskSchema = new Schema({
         enum: ["social", "refer"],
         required: true
     },
+    category: {
+        type: String,
+        enum: ["instant", "new", "social", "academy"],
+        required: true
+    },
     reward: {
         type: Number,
         required: true
@@ -38,6 +43,10 @@ const TaskSchema = new Schema({
         default: false
     },
     task: {
+        type: String,
+        required: true
+    },
+    icon: {
         type: String,
         required: true
     },

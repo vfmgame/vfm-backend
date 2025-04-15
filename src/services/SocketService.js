@@ -64,52 +64,52 @@ module.exports = (io, socket) => {
       if(numberOfDays === 1) {
         callback({
           points: 10,
-          passes: 5,
+          passes: 3,
           numberOfDays
         });
       } else if(numberOfDays === 2) {
         callback({
           points: 20,
-          passes: 5,
+          passes: 3,
           numberOfDays
         });
       } else if(numberOfDays === 3) {
         callback({
           points: 30,
-          passes: 5,
+          passes: 3,
           numberOfDays
         });
 
       } else if(numberOfDays === 4) {
         callback({
           points: 40,
-          passes: 5,
+          passes: 3,
           numberOfDays
         });
 
       } else if(numberOfDays === 5) {
         callback({
           points: 50,
-          passes: 5,
+          passes: 3,
           numberOfDays
         });
 
       } else if(numberOfDays === 6) {
         callback({
           points: 60,
-          passes: 5,
+          passes: 3,
           numberOfDays
         });
       } else if(numberOfDays === 7) {
         callback({
           points: 70,
-          passes: 5,
+          passes: 3,
           numberOfDays
         });
       } else if(numberOfDays > 7) {
         callback({
           points: 70,
-          passes: 5,
+          passes: 3,
           numberOfDays
         });
       }

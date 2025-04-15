@@ -27,7 +27,7 @@ module.exports = class GameService {
     });
 
     const updateUserWallet = await this.userModel.findOneAndUpdate({ userId }, {
-      $inc: { "wallet.points": data.reward },
+      $inc: { "wallet.points": data.reward, "wallet.passes": data.passes },
       $set: { updatedAt: ts },
     },
     {
