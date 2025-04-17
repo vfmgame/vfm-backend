@@ -30,9 +30,6 @@ const TaskSchema = new Schema({
         type: Number,
         required: true
     },
-    icon: {
-        type: String,
-    },
     description: {
         type: String,
         trim: true,
