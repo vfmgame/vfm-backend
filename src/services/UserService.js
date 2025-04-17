@@ -7,10 +7,6 @@ module.exports = class UserService {
   }
 
 
-  async GetUserSetting() {
-    const userSettings = await this.userModel.findOne();
-    return userSettings;
-  }
     
   async getUser(userId) {
     const fetchUser = await this.userModel.findOne({ userId });
@@ -97,7 +93,7 @@ module.exports = class UserService {
   }
 
 
-  async ClaimReward(reward, userId) {
+  async ClaimReward(type, reward, userId) {
     const ts = new Date(); // timestamp
     const updateUser = await this.userModel.findOneAndUpdate({ userId }, {
       $inc: { "wallet.points": reward },
@@ -116,13 +112,15 @@ module.exports = class UserService {
       error.statusCode = 500;
       throw error;
     }
+
+    userEvents.dispatch(events.user.claimFarmReward, { userId, reward, type });
     return updateUser;
   }
 
 
   async ClaimDailyReward(data, userId) {
     const ts = new Date(); // timestamp
-    const updateBonus = await this.userModel.findOneAndUpdate({ userId }, {
+    const updateDailyReward = await this.userModel.findOneAndUpdate({ userId }, {
       $inc: { "wallet.points": data.points, "wallet.passes": data.passes,  },
       $set: { 
         checkedInDays: data.numberOfDays,
@@ -135,12 +133,13 @@ module.exports = class UserService {
         new: true
     });
 
-    if (!updateBonus) {
+    if (!updateDailyReward) {
       let error = new Error("Something went wrong. Try again.");
       error.statusCode = 500;
       throw error;
     }
-    return updateBonus;
+    userEvents.dispatch(events.user.claimDailyReward, { userId, points: data.points, passes: data.passes });
+    return updateDailyReward;
   }
 
 

@@ -11,6 +11,9 @@
   "author": "Code Rigi (Saviour Essien)",
   "license": "ISC",
   "dependencies": {
+    "@cosmjs/encoding": "^0.33.1",
+    "@cosmjs/proto-signing": "^0.33.1",
+    "@cosmjs/stargate": "^0.33.1",
     "@hokify/agenda": "^6.3.0",
     "@pulsecron/pulse": "^1.5.1",
     "abort-controller": "^3.0.0",

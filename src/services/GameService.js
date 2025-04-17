@@ -17,6 +17,7 @@ module.exports = class GameService {
     {
       new: true
     });
+    userEvents.dispatch(events.user.deductPlayPass, { userId });
     return deductedPlayPasses;
   }
 
@@ -32,6 +33,7 @@ module.exports = class GameService {
     {
       new: true
     });
+    userEvents.dispatch(events.user.addPlayScore, { userId, reward: points });
     return updateUserScore;
   }
 }

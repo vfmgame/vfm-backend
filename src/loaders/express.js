@@ -4,7 +4,7 @@ const express = require("express");
 const session = require("express-session");
 const Secrets = require("../config");
 const path = require("path")
-const { authRoutes, userRoutes, gameRoutes, taskRoutes } = require("../api");
+const { authRoutes, userRoutes, gameRoutes, taskRoutes, transactionRoutes } = require("../api");
 
 module.exports = async (app) => {
   app.get("/status", (req, res) => { res.status(200).end()});
@@ -53,6 +53,7 @@ module.exports = async (app) => {
   //app.use("/uploads", express.static("uploads"))
   app.use("/api/v1/games", gameRoutes);
   app.use("/api/v1/tasks", taskRoutes);
+  app.use("/api/v1/transaction", transactionRoutes);
   app.use("/api/v1/users", userRoutes);
   app.use("/api/v1/auth", authRoutes);
 

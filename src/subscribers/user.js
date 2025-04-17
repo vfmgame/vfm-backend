@@ -1,6 +1,7 @@
 const { user } = require("./events");
 const UserModel = require("../models/User");
 const TaskModel = require("../models/Task");
+const TransactionModel = require("../models/Transaction");
 const pulse = require("../jobs/pulse");
 const { v4: uuidv4 } = require("uuid");
 
@@ -41,6 +42,15 @@ userEvents.on(user.signUp, async({ referredBy, userId }) => {
         $inc: { referralEarnings: 20 },
         $set: {updatedAt: ts}},
         {new: true});
+
+
+    await TransactionModel.create({
+        id: await uuidv4(),
+        userId,
+        icon: "https://res.cloudinary.com/dzlx5cw7g/image/upload/v1744885674/vfm-token_rovbpn.svg",
+        description: "Received referral bonus",
+        reward: `+20 VFM`
+    })
 });
 
 
@@ -134,11 +144,11 @@ userEvents.on(user.signUp, async({ referredBy, userId }) => {
 });
 
 
-userEvents.on(user.login, async({ userId, lastCheckedIn, checkedInDays }) => {
-    await pulse.schedule("12am", "claim_daily_bonus", {
-        userId
-    })
-});
+// userEvents.on(user.login, async({ userId, lastCheckedIn, checkedInDays }) => {
+//     await pulse.schedule("12am", "claim_daily_bonus", {
+//         userId
+//     })
+// });
 
 
 
@@ -183,6 +193,70 @@ userEvents.on(user.claimBonus, async({ userId, points }) => {
         $inc: { referralEarnings: tenPercent },
         $set: {updatedAt: ts}},
     {new: true});
+});
+
+
+userEvents.on(user.claimBonus, async({ userId, points }) => {
+    await TransactionModel.create({
+        id: await uuidv4(),
+        userId,
+        icon: "https://res.cloudinary.com/dzlx5cw7g/image/upload/v1744885674/vfm-token_rovbpn.svg",
+        description: "Received from bonus",
+        reward: `+${points} VFM`
+    })
+});
+
+
+userEvents.on(user.claimFarmReward, async({ userId, reward }) => {
+    await TransactionModel.create({
+        id: await uuidv4(),
+        userId,
+        icon: "https://res.cloudinary.com/dzlx5cw7g/image/upload/v1744885674/vfm-token_rovbpn.svg",
+        description: "Receive from farming",
+        reward: `+${reward} VFM`
+    })
+});
+
+
+userEvents.on(user.claimDailyReward, async({ userId, points, passes }) => {
+    await TransactionModel.create({
+        id: await uuidv4(),
+        userId,
+        icon: "https://res.cloudinary.com/dzlx5cw7g/image/upload/v1744885674/vfm-token_rovbpn.svg",
+        description: "Receive from daily rewards",
+        reward: `+${points} VFM`
+    })
+
+
+    await TransactionModel.create({
+        id: await uuidv4(),
+        userId,
+        icon: "https://res.cloudinary.com/dzlx5cw7g/image/upload/v1744886473/play-passes_aluldx.svg",
+        description: "Receive from daily rewards",
+        reward: `+${passes} PP`
+    })
+});
+
+
+userEvents.on(user.deductPlayPass, async({ userId }) => {
+    await TransactionModel.create({
+        id: await uuidv4(),
+        userId,
+        icon: "https://res.cloudinary.com/dzlx5cw7g/image/upload/v1744886473/play-passes_aluldx.svg",
+        description: "Spent for drop game",
+        reward: `-1 VFM`
+    })
+});
+
+
+userEvents.on(user.addPlayScore, async({ userId, reward }) => {
+    await TransactionModel.create({
+        id: await uuidv4(),
+        userId,
+        icon: "https://res.cloudinary.com/dzlx5cw7g/image/upload/v1744885674/vfm-token_rovbpn.svg",
+        description: "Receive from drop game",
+        reward: `+${reward} VFM`
+    })
 });
 
 

@@ -75,13 +75,14 @@ authRouter.put("/bonus/claim",
 authRouter.put("/reward/claim",
   celebrate({
     body: Joi.object({
+      type: Joi.string().required(),
       reward: Joi.number().required()
     }),
   }),
   async (req, res, next) => {
     try {
       const userServiceInstance = new UserService(UserModel);
-      const claimBonus = await userServiceInstance.ClaimReward(req.body.reward, req.user.userId);
+      const claimBonus = await userServiceInstance.ClaimReward(req.body.type, req.body.reward, req.user.userId);
       return sendResponse(req, res, 200, false, claimBonus, "Reward claimed successfully");
     } catch (error) {
       return next(error);
