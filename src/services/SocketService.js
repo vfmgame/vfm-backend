@@ -4,15 +4,11 @@ const UserModel = require("../models/User");
 
 module.exports = (io, socket) => {
   const storeUser = (payload, callback) => {
-    console.log(payload);
     const { error, user } = addUser({ id: payload.id, userName: payload.userName, room: payload.userId });
-
-    console.log(user)
     if(error) return callback(error);
 
     socket.join(user.room);
     callback();
-    console.log("User added!");
   }
 
   // countDuplicateProspects = async (payload) => {
@@ -52,15 +48,12 @@ module.exports = (io, socket) => {
   
   
   const calculateUserBonus = async (payload, callback) => {
-    console.log(payload);
     const ts = new Date();
     const numberOfDays = getNumberOfDays(payload.lastCheckedIn, Date.now());
     const currentDay = checkCurrentDate(Date.now(), payload.lastCheckedIn);
-    console.log(currentDay);
     //let newCheckInDay = payload.checkedInDays;
 
     if(numberOfDays !== payload.checkedInDays && currentDay === true && payload.checkedIn === false) {
-      console.log(numberOfDays, "Yes");
       if(numberOfDays === 1) {
         callback({
           points: 10,
@@ -114,7 +107,6 @@ module.exports = (io, socket) => {
         });
       }
     } else {
-      console.log(" This is true");
     }
   }
   

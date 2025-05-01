@@ -17,6 +17,7 @@ router.post("/connect",
       lastName: Joi.string().optional(),
       nickName: Joi.string().required(),
       color: Joi.string().required(),
+      timezone: Joi.string().required(),
       avatar: Joi.string().optional(),
       referrer: Joi.optional()
     }),
@@ -48,9 +49,6 @@ authRouter.post("/nickname/validate",
       return next(error);
     }
 });
-
-
-
 
 
 router.post("/login",

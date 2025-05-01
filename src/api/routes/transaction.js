@@ -12,7 +12,7 @@ authRouter.get("/",
   async (req, res, next) => {
     try {
       const transactionServiceInstance = new TransactionService(TransactionModel);
-      const transactions = await transactionServiceInstance.GetTransactions(req.user.userId);
+      const transactions = await transactionServiceInstance.GetTransactions(req.user._id);
       return sendResponse(req, res, 200, false, transactions, "Transactions fetched!");
     } catch (error) {
       return next(error)

@@ -2,6 +2,7 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const gameRoutes = require("./routes/game");
 const taskRoutes = require("./routes/task");
+const walletRoutes = require("./routes/wallet");
 const transactionRoutes = require("./routes/transaction");
 
 
@@ -10,5 +11,6 @@ module.exports = {
 	userRoutes,
 	gameRoutes,
 	taskRoutes,
+	walletRoutes,
 	transactionRoutes
 }

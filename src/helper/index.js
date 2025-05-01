@@ -7,6 +7,7 @@ const generateRandomNDigits = require("./tokenGenerator");
 const { encrypt, decrypt } = require("./encryption");
 const prepStream = require("./eventStream");
 const {getNumberOfDays, checkCurrentDate} = require("./dateCalculator");
+const cloudinary = require("./cloudinary");
 
 
 // const EXTEND_PERIOD = (
@@ -40,5 +41,6 @@ module.exports = {
 	prepStream,
 	generateRandomNDigits,
 	getNumberOfDays,
-	checkCurrentDate
+	checkCurrentDate,
+	cloudinary
 }
