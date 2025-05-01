@@ -1,5 +1,5 @@
 /*
-Task schema
+AdminTask schema
 */
 const mongoose = require("mongoose");
 require("../index");
@@ -51,9 +51,6 @@ const SubSectionTaskSchema = new Schema({
         type: String,
         default: null
     },
-    answer: {
-        type: String
-    },
     reward: {
         type: Object,
         required: true
@@ -89,27 +86,16 @@ const SubSectionTaskSchema = new Schema({
     }
 });
 
-SubSectionTaskSchema.methods.toJSON = function () {
-    let taskObject = this.toObject();
-    console.log(taskObject);
-    delete taskObject.answer;
-    // subType === "MINI_APP" && delete taskObject.socialSubscription;
-    // type === "SOCIAL_SUBSCRIPTION" && delete taskObject.applicationLaunch;
-    return taskObject;
-};
-
 // SubTask Schema inside SubSections
 const SubSectionSchema = new mongoose.Schema({
     title: String,
     tasks: [SubSectionTaskSchema],
 });
 
-
-
-const TaskSchema = new Schema({
-    userId: { 
+const AdminTaskSchema = new Schema({
+    creatorId: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: "User"
+        ref: "Admin"
     },
     tasks: {
         type: Array,
@@ -132,13 +118,19 @@ const TaskSchema = new Schema({
 });
 
 
-TaskSchema.methods.toJSON = function () {
+AdminTaskSchema.methods.toJSON = function () {
     let taskObject = this.toObject();
     delete taskObject.__v;
     return taskObject;
 };
 
+SubSectionTaskSchema.methods.toJSON = function () {
+    let taskObject = this.toObject();
+    delete taskObject.__v;
+    subType === "MINI_APP" && delete taskObject.socialSubscription;
+    type === "SOCIAL_SUBSCRIPTION" && delete taskObject.applicationLaunch;
+    return taskObject;
+};
 
-
-const Tasks = mongoose.model("Tasks", TaskSchema);
-module.exports = Tasks;
+const AdminTasks = mongoose.model("AdminTasks", AdminTaskSchema);
+module.exports = AdminTasks;

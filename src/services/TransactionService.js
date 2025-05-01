@@ -4,7 +4,7 @@ module.exports = class UserService {
   }
 
   async GetTransactions(userId) {
-    const transaction = await this.transactionModel.find({ userId });
+    const transaction = await this.transactionModel.find({ userId }).sort({ createdAt: -1 });
     return transaction;
   }
 }

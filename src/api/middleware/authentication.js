@@ -14,6 +14,7 @@ module.exports = (req, res, next) => {
                     let user = decoded;
                     if(user && user.userId) {
                         user.userId = decrypt(user.userId);
+                        user._id = decrypt(user._id);
                         user.timezone = timezone;
                         req["user"] = user;
                         next();

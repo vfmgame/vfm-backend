@@ -11,10 +11,6 @@ require("../index");
 const {Schema} = mongoose;
 
 const UserSchema = new Schema({
-	id: {
-        type: String,
-        unique: true
-    },
 	userId: {
         type: String,
         unique: true
@@ -29,7 +25,7 @@ const UserSchema = new Schema({
 	},
 	nickName: {
 		type: String,
-		unique: 'Two users cannot share the same nickname ({VALUE})',
+		unique: "Two users cannot share the same nickname ({VALUE})",
 		trim: true,
 		required: true
 	},
@@ -70,14 +66,6 @@ const UserSchema = new Schema({
 		required: false,
 		unique: true
 	},
-	wallet: {
-		type: Object,
-		default: {
-			points: 0,
-			passes: 3
-		},
-		required: false
-	},
 	isMining: {
 		type: Boolean,
 		required: false,
@@ -115,9 +103,33 @@ const UserSchema = new Schema({
 UserSchema.methods.toJSON = function () {
 	let userObject = this.toObject();
 	delete userObject.__v;
-	delete userObject._id;
 	return userObject;
 };
+
+// Middleware: before saving new user
+UserSchema.post("save", async function (doc, next) {
+	console.log(doc);
+
+	try {
+		const AdminTaskModel = require("./AdminTask");
+		const TaskModel = require("./Task");
+		const tasks = await AdminTaskModel.find({}).lean();
+
+		tasks.map(task => (
+			TaskModel.create({
+			userId: doc._id,
+			tasks: task.tasks,
+			sectionType: task.sectionType,
+			subSections: task.subSections,
+			})
+		));
+		console.log("✅ Tasks copied to new user.");
+	} catch (error) {
+		console.error("❌ Error copying Tasks to new user:", error);
+		return next(error);
+	}
+	next();
+});
 
 const Users = mongoose.model("Users", UserSchema);
 module.exports = Users;

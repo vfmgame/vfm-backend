@@ -8,6 +8,7 @@ const Secrets = require("../../config");
 const router = Router();
 const authRouter = Router();
 const upload = require("../../helper/upload");
+const { cloudinary } = require("../../helper");
 
 
 
@@ -15,7 +16,7 @@ authRouter.get("/details",
   async (req, res, next) => {
     try {
       const userServiceInstance = new UserService(UserModel);
-      const userDetails = await userServiceInstance.getUser(req.user.userId);
+      const userDetails = await userServiceInstance.GetUser(req.user._id);
       return sendResponse(req, res, 200, false, userDetails, "Account fetched!");
     } catch (error) {
       return next(error)
@@ -26,8 +27,6 @@ authRouter.get("/details",
 authRouter.get("/refers",
   async (req, res, next) => {
     const { referralId } = req.query;
-    console.log(referralId);
-    
     try {
       const userServiceInstance = new UserService(UserModel);
       const userReferral = await userServiceInstance.FetchReferral(referralId);
@@ -47,10 +46,9 @@ authRouter.put("/profile",
   async (req, res, next) => {
     try {
       const userServiceInstance = new UserService(UserModel);
-      const user = await userServiceInstance.UpdateUserProfile(req.body.nickName, req.user.userId);
+      const user = await userServiceInstance.UpdateUserProfile(req.body.nickName, req.user._id);
       return sendResponse(req, res, 200, false, user, "Profile updated successfully!");
     } catch (error) {
-      console.log(error);
       return next(error);
     }
 });
@@ -64,7 +62,7 @@ authRouter.put("/bonus/claim",
   async (req, res, next) => {
     try {
       const userServiceInstance = new UserService(UserModel);
-      const claimBonus = await userServiceInstance.ClaimBonus(req.body.bonus, req.user.userId);
+      const claimBonus = await userServiceInstance.ClaimBonus(req.body.bonus, req.user._id);
       return sendResponse(req, res, 200, false, claimBonus, "Bonus claimed successfully");
     } catch (error) {
       return next(error);
@@ -76,13 +74,13 @@ authRouter.put("/reward/claim",
   celebrate({
     body: Joi.object({
       type: Joi.string().required(),
-      reward: Joi.number().required()
+      points: Joi.number().required()
     }),
   }),
   async (req, res, next) => {
     try {
       const userServiceInstance = new UserService(UserModel);
-      const claimBonus = await userServiceInstance.ClaimReward(req.body.type, req.body.reward, req.user.userId);
+      const claimBonus = await userServiceInstance.ClaimReward(req.body.type, req.body.points, req.user._id);
       return sendResponse(req, res, 200, false, claimBonus, "Reward claimed successfully");
     } catch (error) {
       return next(error);
@@ -101,7 +99,7 @@ authRouter.put("/reward/daily/claim",
   async (req, res, next) => {
     try {
       const userServiceInstance = new UserService(UserModel);
-      const claimDailyBonus = await userServiceInstance.ClaimDailyReward(req.body, req.user.userId);
+      const claimDailyBonus = await userServiceInstance.ClaimDailyReward(req.body, req.user._id);
       return sendResponse(req, res, 200, false, claimDailyBonus, "Daily reward claimed successfully");
     } catch (error) {
       return next(error);
@@ -119,7 +117,7 @@ authRouter.post("/farm",
   async (req, res, next) => {
     try {
       const userServiceInstance = new UserService(UserModel);
-      const startFarming = await userServiceInstance.FarmReward(req.body, req.user.userId);
+      const startFarming = await userServiceInstance.FarmReward(req.body, req.user._id);
       return sendResponse(req, res, 200, false, startFarming, "Farming request successful");
     } catch (error) {
       return next(error);
@@ -127,12 +125,18 @@ authRouter.post("/farm",
 });
 
 
-authRouter.post("/upload/avatar", upload("avatars").single("avatar"),
+authRouter.post("/upload/avatar", upload.single("avatar"),
   async (req, res, next) => {
     try {
       const userServiceInstance = new UserService(UserModel);
-      const uploadAvatar = await userServiceInstance.UploadAvatar(req.file.filename, req.user.userId);
-      return sendResponse(req, res, 200, false, uploadAvatar, "Avatar upload successful");
+      cloudinary.uploader.upload(req.file.path, async function (err, result) {
+        if(err) {
+          console.log(err);
+          return next(err);
+        }
+        const uploadAvatar = await userServiceInstance.UploadAvatar(result.url, req.user._id);
+        return sendResponse(req, res, 200, false, uploadAvatar, "Avatar upload successful");
+      })
     } catch (error) {
       return next(error);
     }

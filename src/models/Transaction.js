@@ -12,21 +12,18 @@ const TransactionSchema = new Schema({
         type: String,
         unique: true
     },
-    userId: {
-        type: String,
-        required: true
+    userId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "User",
+        unique: true
     },
     reward: {
-        type: String,
+        type: Object,
         required: true
     },
     description: {
         type: String,
         trim: true,
-        required: true
-    },
-    icon: {
-        type: String,
         required: true
     },
     createdAt: {

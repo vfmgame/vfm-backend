@@ -10,11 +10,11 @@ const authRouter = Router();
 
 
 
-authRouter.get("/",
+authRouter.get("/my",
   async (req, res, next) => {
     try {
       const taskServiceInstance = new TaskService(TaskModel, UserModel);
-      const tasks = await taskServiceInstance.GetUserTasks(req.user.userId);
+      const tasks = await taskServiceInstance.GetUserTasks(req.user._id);
       return sendResponse(req, res, 200, false, tasks, "Tasks fetched!");
     } catch (error) {
       return next(error)
@@ -39,6 +39,27 @@ authRouter.put("/",
       return next(error)
     }
 });
+
+
+authRouter.post("/start",
+  celebrate({
+    body: Joi.object({
+      id: Joi.string().required(),
+      subSectionId: Joi.string().required(),
+      taskId: Joi.string().required(),
+    }),
+  }),
+  
+  async (req, res, next) => {
+    try {
+      const taskServiceInstance = new TaskService(TaskModel, UserModel);
+      const section = await taskServiceInstance.StartSubSectionTask(req.body, req.user._id);
+      return sendResponse(req, res, 200, false, section, "Task Started successfully")
+    } catch (error) {
+      return next(error);
+    }
+});
+
 
 
 router.use("/", authentication, authorization, authRouter);
